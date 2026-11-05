@@ -156,7 +156,7 @@ Indexes: `{ status: 1, 'pickupLocation.division': 1, pickupDeadline: 1 }`, dedup
 SurplusListing.findOneAndUpdate(
   { _id, status: 'open', pickupDeadline: { $gt: now },
     $expr: { $gte: [ { $subtract: ['$quantityTotal', { $add: ['$quantityReserved', '$quantityWastedUnreserved'] }] }, qty ] } },
-  { $inc: { quantityReserved: qty } }, { new: true })
+  { $inc: { quantityReserved: qty } }, { returnDocument: 'after' })
 ```
 
 ### foodrequests (M1-C)

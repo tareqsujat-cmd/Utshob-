@@ -62,7 +62,7 @@ Plain-language explanations of every concept the code uses. Read an entry before
 const listing = await SurplusListing.findOneAndUpdate(
   { _id: id, status: 'open', /* enough left? */ },
   { $inc: { quantityReserved: qty } },
-  { new: true }
+  { returnDocument: 'after' }
 );
 if (!listing) throw httpError(409, 'Not enough food left');
 ```
@@ -103,3 +103,19 @@ Check and change happen in **one** atomic step. The naive version (read, check i
 **React Router**: maps browser URLs to page components; protected routes redirect to login when there is no user.
 **Tailwind**: utility CSS classes in markup (`className="rounded-xl bg-card p-4"`). Responsive prefixes: `md:` applies from 768 px up.
 **Leaflet**: map library; OpenStreetMap supplies the tiles (map images).
+**Nested routes and `<Outlet />`**: in `App.jsx`, logged-in pages are children of the `<AppShell />` route. AppShell draws the sidebar and top bar, and `<Outlet />` is the spot where the current child page appears.
+**Route guard**: a wrapper component (`RequireAuth`, `RequireRole`) that decides whether to show a page or redirect. It only affects the browser; the backend still checks everything.
+**Custom hook**: a function starting with `use` that bundles state and effects for reuse, e.g. `useFetch(path)` returns `{ data, loading, error, reload }`.
+**Effect cleanup**: the function returned from `useEffect` runs when the component disappears, e.g. `clearInterval` for the notification polling timer.
+**Controlled input**: an input whose value comes from React state (`value={form.name}` + `onChange`), so React always knows what is typed.
+**Vite dev proxy**: in development the React app (port 5173) calls `/api/...`, and Vite forwards it to Express (port 5000), so no CORS setup is needed locally.
+**Design tokens**: named colours and fonts defined once in `client/src/index.css` (`@theme`). Change `--color-primary` there and every primary button changes.
+
+## Tooling
+
+**npm scripts**: shortcuts in `package.json` (`npm run dev`, `npm run seed`, `npm test`).
+**`node --watch`**: restarts the server automatically when a file changes.
+**Seed script**: inserts demo records into the database through the same Mongoose models the app uses. It is not hardcoding, because the UI still reads everything through the API.
+**Vitest + Supertest + mongodb-memory-server**: Vitest runs the tests; Supertest sends HTTP requests to the Express app without opening a port; mongodb-memory-server starts a throwaway MongoDB for each test file.
+**`returnDocument: 'after'`**: option for `findOneAndUpdate` that returns the document *after* the update (Mongoose 9's replacement for the older `new: true`).
+**`select: false` / `.select('+field')`**: a schema field marked `select: false` (like `passwordHash`) is left out of query results unless a query explicitly asks for it with `+`.

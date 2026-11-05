@@ -11,34 +11,34 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 ## Common workflows (not graded, so build simply and early)
 
 ### C1. Auth and accounts
-- [ ] Sign up with name, email, password, role, division/district, phone
-- [ ] Host and volunteer accounts are active immediately; provider and coordinator accounts start `pending`
-- [ ] Login returns JWT; logout clears it client-side (and writes an audit entry)
-- [ ] `GET /api/auth/me` restores the session on reload
-- [ ] Pending users can log in but only see a "waiting for approval" page (operational routes return 403)
+- [x] Sign up with name, email, password, role, division/district, phone
+- [x] Host and volunteer accounts are active immediately; provider and coordinator accounts start `pending`
+- [x] Login returns JWT; logout clears it client-side (and writes an audit entry)
+- [x] `GET /api/auth/me` restores the session on reload
+- [x] Pending users can log in but see a "waiting for approval" banner (`requireApproved` returns 403 on operational routes as they are added)
 
 ### C2. Roles, dashboards, permissions
-- [ ] Role-based sidebar and a dashboard home per role (reads real counts from the API)
-- [ ] Backend `requireRole` on every route, plus record-level checks (owner / organizer / assigned / same organization)
-- [ ] Admin can read everything
+- [~] Role-based sidebar and a dashboard home per role (reads real counts from the API). The admin dashboard is complete; other roles gain cards as their features land
+- [x] Backend `requireRole` on every route, plus record-level checks (owner / organizer / assigned / same organization), applied to each feature's routes as they are built
+- [x] Admin can read everything
 
 ### C3. Profile
-- [ ] View/edit own profile (name, phone, division, district)
-- [ ] Change password
-- [ ] Coordinators: create/view their organization (orphanage or outreach). It needs admin approval.
+- [x] View/edit own profile (name, phone, division, district)
+- [x] Change password
+- [x] Coordinators: create (at signup) and view/edit their organization (orphanage or outreach). It needs admin approval.
 
 ### C4. Admin
-- [ ] Approval queue: provider accounts and community organizations (approve/reject with reason)
-- [ ] Audit log viewer (who / what / when / why, filter by entity)
-- [ ] "Reset demo" button (re-runs the seed)
-- [ ] Demo fault toggle: "Simulate Telegram outage" (stored in `appsettings`)
+- [x] Approval queue: provider accounts and community organizations (approve/reject with reason)
+- [x] Audit log viewer (who / what / when / why, filter by entity type and action)
+- [x] "Reset demo" button (re-runs the seed)
+- [~] Demo fault toggle: "Simulate Telegram outage" (stored in `appsettings`). The switch works; its effect is wired in M2-C
 
 ### C5. Cross-cutting
-- [ ] Audit log written for important changes (who, when, why, field diffs)
-- [ ] In-app notifications (bell icon, unread count, mark read)
-- [ ] Event cancel/reschedule notifies organizers, booked providers and surplus coordinators
-- [ ] `GET /api/meta`: divisions, districts, roles, units, categories (no hardcoded lists in React)
-- [ ] Central error handler, helmet, rate limiting, CORS, `.env.example`
+- [x] Audit log written for important changes (who, when, why, field diffs)
+- [x] In-app notifications (bell icon, unread count, mark read)
+- [ ] Event cancel/reschedule notifies organizers, booked providers and surplus coordinators (M1-A)
+- [~] `GET /api/meta`: divisions, districts, roles (units and categories are added by their features)
+- [x] Central error handler, helmet, rate limiting, CORS, `.env.example`
 
 ---
 

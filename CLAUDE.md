@@ -87,7 +87,7 @@ A request always flows like this: **route → middleware (auth, validate, plan g
 - Authorization on **every** route: role check plus ownership/record check (e.g., `event.owner` or `event.organizers` includes `req.user._id`). Admin can read everything.
 - Validate every body/query with zod. Reject unknown fields that matter.
 - Correctness patterns (use exactly these, consistently):
-  - **Atomic conditional update**: `findOneAndUpdate({ _id, <guard> }, { $inc / $set }, { new: true })`. If it returns `null`, the guard failed, so respond 409. Used for surplus reservations, plan quotas, payment confirmation, batch adjustments.
+  - **Atomic conditional update**: `findOneAndUpdate({ _id, <guard> }, { $inc / $set }, { returnDocument: 'after' })`. If it returns `null`, the guard failed, so respond 409. Used for surplus reservations, plan quotas, payment confirmation, batch adjustments.
   - **Unique index as a lock**: venue hour slots (`venueslots`), one active task per reservation (`activeKey`), surplus dedupe (`dedupeKey`), one review per booking, one point entry per action.
   - **Idempotency-Key header**: the client sends a UUID per form submit; it is stored with a unique index; a repeat returns the existing record.
   - Separate quantity fields (collected / received / accepted / rejected / distributed / remaining / disputed / lost). Never one "quantity" reused for different meanings.
@@ -114,12 +114,16 @@ A request always flows like this: **route → middleware (auth, validate, plan g
 6. `docs/walkthrough/<FEATURE-ID>.md` (7 sections: what, file map, request flow, key snippets, viva Q&A, 3 drills, 60-second demo script).
 7. Box ticked in `docs/SPEC.md`, small commit.
 
-## Commands (filled in during Phase 1)
+## Commands (run from the project root)
 ```
-npm run dev        # root: runs server and client together
-npm run seed       # root: reset + insert demo data
-npm test           # root: server tests
+npm run setup      # install server + client packages
+npm run db         # local MongoDB on :27017 (data in server/.localdb); skip if using Atlas
+npm run seed       # wipe + insert demo data (password for all demo accounts: Demo@1234)
+npm run dev        # API on :5000 (node --watch) + React on :5173 (Vite proxies /api)
+npm test           # server tests (Vitest + Supertest + mongodb-memory-server)
+npm run build      # production build of the client
 ```
+Windows note for Git Bash: set `MSYS_NO_PATHCONV=1` before passing URL paths like `/login` as arguments.
 
 ## Teaching mode
 The user must understand everything. Explain a new concept before using it and add it to `docs/GLOSSARY.md`.
