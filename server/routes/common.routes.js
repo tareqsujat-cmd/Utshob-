@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getMeta } from '../controllers/meta.controller.js';
+import { getMeta, getDemoAccounts } from '../controllers/meta.controller.js';
 import { getDashboard } from '../controllers/dashboard.controller.js';
 import * as notifications from '../controllers/notifications.controller.js';
 import { requireAuth } from '../middleware/auth.js';
@@ -7,6 +7,7 @@ import { requireAuth } from '../middleware/auth.js';
 // Small shared routes: /api/meta, /api/dashboard, /api/notifications
 export const metaRouter = Router();
 metaRouter.get('/', getMeta);
+metaRouter.get('/demo-accounts', getDemoAccounts);
 
 export const dashboardRouter = Router();
 dashboardRouter.get('/', requireAuth, getDashboard);
