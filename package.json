@@ -1,0 +1,15 @@
+{
+  "name": "utshob",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "UTSHOB (Share the Table): event planning and surplus food redistribution. CSE471 Group 08.",
+  "scripts": {
+    "setup": "npm install --prefix server && npm install --prefix client",
+    "db": "npm run db --prefix server",
+    "dev": "node scripts/dev.js",
+    "seed": "npm run seed --prefix server",
+    "test": "npm test --prefix server",
+    "build": "npm run build --prefix client"
+  }
+}
