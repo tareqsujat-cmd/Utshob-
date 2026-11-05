@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* Design tokens. Every colour and font in the app comes from here.
+   Tailwind turns each --color-* into classes: bg-primary, text-muted, border-line ... */
+@theme {
+  --font-sans: "Inter", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+
+  --color-ink: #1c2b2d;
+  --color-muted: #6b7a7c;
+  --color-paper: #fbf8f3;
+  --color-card: #ffffff;
+  --color-line: #e7e1d7;
+
+  --color-primary: #0e5e5a;
+  --color-primary-dark: #0a4542;
+  --color-primary-soft: #e3f1ef;
+  --color-accent: #e39b2d;
+  --color-accent-soft: #fbefd9;
+
+  --color-success: #2f7d4f;
+  --color-success-soft: #e2f2e8;
+  --color-warning: #b7791f;
+  --color-warning-soft: #fcf1dc;
+  --color-danger: #b8433a;
+  --color-danger-soft: #f8e4e1;
+}
+
+body {
+  @apply bg-paper text-ink font-sans antialiased;
+}
+
+h1,
+h2,
+h3 {
+  @apply font-display;
+}
+
+/* Visible keyboard focus everywhere (accessibility). */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
