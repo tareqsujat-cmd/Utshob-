@@ -7,3 +7,6 @@ dist/
 coverage/
 # original Word files are copied into docs/source
 /*.docx
+
+# local MongoDB data folder (npm run db)
+.localdb/
