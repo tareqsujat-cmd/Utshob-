@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+.env.local
+*.log
+.vercel
+coverage/
+# original Word files are copied into docs/source
+/*.docx
