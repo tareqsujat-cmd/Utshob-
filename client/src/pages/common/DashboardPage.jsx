@@ -5,6 +5,7 @@ import { PageHeader, StatTile, Alert } from '../../components/ui/Layout.jsx';
 import { Card, CardHeader } from '../../components/ui/Card.jsx';
 import { ButtonLink } from '../../components/ui/Button.jsx';
 import { LoadingState, ErrorState } from '../../components/ui/States.jsx';
+import { BookabilityPanel } from '../m1b-providers/BookabilityPanel.jsx';
 
 function greeting() {
   const hour = new Date().getHours();
@@ -58,15 +59,45 @@ export function DashboardPage() {
             )}
             {user.role === 'admin' && (
               <>
-                <StatTile label="Waiting for approval" value={data.summary.pendingApprovals} icon="shield" tone="warning" />
+                <StatTile label="Accounts waiting for approval" value={data.summary.pendingApprovals} icon="users" tone="warning" />
+                <StatTile label="Credentials to review" value={data.summary.pendingCredentials} icon="shield" tone="warning" />
                 <StatTile label="Approved organizations" value={data.summary.approvedOrganizations} icon="home" tone="success" />
+              </>
+            )}
+            {user.role === 'provider' && data.summary.provider && (
+              <>
+                <StatTile label="Active packages" value={data.summary.provider.activePackages} icon="file" />
+                <StatTile label="Documents waiting for review" value={data.summary.provider.pendingCredentials} icon="shield" tone="warning" />
+                <StatTile label="Upcoming blocked dates" value={data.summary.provider.upcomingBlockedDates} icon="calendar" />
               </>
             )}
           </div>
 
           {user.role === 'admin' && <AdminOverview summary={data.summary} roleLabels={meta?.roleLabels} />}
+          {user.role === 'provider' && <ProviderOverview provider={data.summary.provider} />}
         </div>
       )}
+    </div>
+  );
+}
+
+// M1-B: provider home: create the profile first, then see whether bookings are allowed.
+function ProviderOverview({ provider }) {
+  if (!provider) {
+    return (
+      <Card>
+        <CardHeader title="Set up your business" subtitle="Create your profile, add packages and upload your documents to start receiving quote requests." />
+        <ButtonLink to="/provider/profile" icon="store">Create business profile</ButtonLink>
+      </Card>
+    );
+  }
+  return (
+    <div className="space-y-4">
+      <BookabilityPanel bookability={provider.bookability} own />
+      <div className="flex flex-wrap gap-2">
+        <ButtonLink to="/provider/packages" variant="secondary" icon="file">Manage packages</ButtonLink>
+        <ButtonLink to="/provider/credentials" variant="secondary" icon="shield">Credentials</ButtonLink>
+      </div>
     </div>
   );
 }
