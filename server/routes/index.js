@@ -4,6 +4,7 @@ import adminRoutes from './admin.routes.js';
 import { usersRouter, organizationsRouter } from './users.routes.js';
 import { metaRouter, dashboardRouter, notificationsRouter } from './common.routes.js';
 import { providersRouter, filesRouter, adminCredentialsRouter } from './m1b.providers.routes.js';
+import { eventsRouter, budgetsRouter, batchesRouter, publicRouter } from './m1a.events.routes.js';
 
 // The whole API in one place: every URL prefix and the router that handles it.
 const api = Router();
@@ -21,6 +22,10 @@ api.use('/admin/credentials', adminCredentialsRouter); // before /admin (more sp
 api.use('/admin', adminRoutes);
 
 // Module 1
+api.use('/events', eventsRouter); // M1-A
+api.use('/budgets', budgetsRouter); // M1-A
+api.use('/batches', batchesRouter); // M1-A
+api.use('/public', publicRouter); // M1-A invitations (no login)
 api.use('/providers', providersRouter); // M1-B
 api.use('/files', filesRouter); // M1-B uploaded documents
 

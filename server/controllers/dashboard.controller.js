@@ -4,6 +4,12 @@ import { Notification } from '../models/Notification.js';
 import { ProviderProfile } from '../models/ProviderProfile.js';
 import { Credential } from '../models/Credential.js';
 import { evaluateBookability } from '../services/provider.service.js';
+import { Event } from '../models/Event.js';
+import { Budget } from '../models/Budget.js';
+import { Rsvp } from '../models/Rsvp.js';
+import { countActiveEvents } from '../services/event.service.js';
+import { totalOf } from '../services/budget.service.js';
+import { getEffectivePlan } from '../services/plan.service.js';
 
 // GET /api/dashboard: numbers for the home page cards of the logged-in user's role.
 // Each feature adds its own numbers here as it is built.
@@ -19,6 +25,31 @@ export async function getDashboard(req, res) {
     summary.pendingCredentials = await Credential.countDocuments({ status: 'pending' }); // M1-B
     // $group counts users per role: [{ _id: 'host', count: 3 }, ...]
     summary.usersByRole = await User.aggregate([{ $group: { _id: '$role', count: { $sum: 1 } } }]);
+  }
+
+  // M1-A: a host's events and the next one coming up
+  if (user.role === 'host') {
+    const plan = await getEffectivePlan(user);
+    summary.events = {
+      active: await countActiveEvents(user._id),
+      limit: plan.limits.activeEvents,
+      total: await Event.countDocuments({ organizers: user._id }),
+    };
+    const next = await Event.findOne({ organizers: user._id, status: { $in: ['draft', 'planned'] }, startsAt: { $gte: new Date() } })
+      .sort({ startsAt: 1 })
+      .select('title startsAt guestCount budgetTotal location status');
+    if (next) {
+      const budget = await Budget.findOne({ event: next._id, isPrimary: true });
+      const rsvpYes = await Rsvp.aggregate([
+        { $match: { event: next._id, response: 'yes' } },
+        { $group: { _id: null, guests: { $sum: '$partySize' } } },
+      ]);
+      summary.nextEvent = {
+        ...next.toObject(),
+        estimated: budget ? totalOf(budget.lines) : 0,
+        confirmedGuests: rsvpYes[0]?.guests || 0,
+      };
+    }
   }
 
   // M1-B: a provider's business status

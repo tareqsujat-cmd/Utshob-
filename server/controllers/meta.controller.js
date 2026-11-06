@@ -24,6 +24,21 @@ export function getMeta(req, res) {
     providerTags: C.PROVIDER_TAGS,
     providerTagLabels: C.PROVIDER_TAG_LABELS,
     upload: { mimeTypes: C.UPLOAD_MIME_TYPES, maxBytes: C.UPLOAD_MAX_BYTES },
+    // M1-A events
+    eventTypes: C.EVENT_TYPES,
+    eventTypeLabels: C.EVENT_TYPE_LABELS,
+    eventStatuses: C.EVENT_STATUSES,
+    budgetCategories: C.BUDGET_CATEGORIES,
+    budgetCategoryLabels: C.BUDGET_CATEGORY_LABELS,
+    requiredServices: C.REQUIRED_SERVICES,
+    serviceLabels: C.SERVICE_LABELS,
+    foodUnits: C.FOOD_UNITS,
+    menuCourses: C.MENU_COURSES,
+    dietaryLabels: C.DIETARY_LABELS,
+    batchTransitions: C.BATCH_TRANSITIONS,
+    invitationPalettes: C.INVITATION_PALETTES,
+    invitationFonts: C.INVITATION_FONTS,
+    invitationLayouts: C.INVITATION_LAYOUTS,
   });
 }
 
