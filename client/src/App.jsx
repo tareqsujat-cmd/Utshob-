@@ -17,6 +17,16 @@ import { ProviderCredentialsPage } from './pages/m1b-providers/ProviderCredentia
 import { ProviderDirectoryPage } from './pages/m1b-providers/ProviderDirectoryPage.jsx';
 import { ProviderPublicPage } from './pages/m1b-providers/ProviderPublicPage.jsx';
 import { AdminCredentialsPage } from './pages/m1b-providers/AdminCredentialsPage.jsx';
+// M1-A Event management
+import { EventsListPage } from './pages/m1a-events/EventsListPage.jsx';
+import { EventFormPage } from './pages/m1a-events/EventFormPage.jsx';
+import { EventLayout } from './pages/m1a-events/EventLayout.jsx';
+import { EventOverviewTab } from './pages/m1a-events/EventOverviewTab.jsx';
+import { EventBudgetTab } from './pages/m1a-events/EventBudgetTab.jsx';
+import { EventFoodTab } from './pages/m1a-events/EventFoodTab.jsx';
+import { EventInvitationTab } from './pages/m1a-events/EventInvitationTab.jsx';
+import { EventHistoryTab } from './pages/m1a-events/EventHistoryTab.jsx';
+import { PublicInvitationPage } from './pages/m1a-events/PublicInvitationPage.jsx';
 
 // Every page of the app and its URL. Pages inside <AppShell> get the sidebar and top bar.
 export default function App() {
@@ -27,11 +37,24 @@ export default function App() {
       {/* Public pages */}
       <Route path="/login" element={<GuestOnly><LoginPage /></GuestOnly>} />
       <Route path="/signup" element={<GuestOnly><SignupPage /></GuestOnly>} />
+      <Route path="/invite/:slug" element={<PublicInvitationPage />} /> {/* M1-A: guests, no login */}
 
       {/* Logged-in pages */}
       <Route element={<RequireAuth><AppShell /></RequireAuth>}>
         <Route index element={<DashboardPage />} />
         <Route path="profile" element={<ProfilePage />} />
+
+        {/* M1-A: one event = a layout with tabs (nested routes) */}
+        <Route path="events" element={only(['host', 'admin'], <EventsListPage />)} />
+        <Route path="events/new" element={only(['host'], <EventFormPage />)} />
+        <Route path="events/:id/edit" element={only(['host'], <EventFormPage />)} />
+        <Route path="events/:id" element={only(['host', 'admin'], <EventLayout />)}>
+          <Route index element={<EventOverviewTab />} />
+          <Route path="budget" element={<EventBudgetTab />} />
+          <Route path="food" element={<EventFoodTab />} />
+          <Route path="invitation" element={<EventInvitationTab />} />
+          <Route path="history" element={<EventHistoryTab />} />
+        </Route>
 
         {/* M1-B */}
         <Route path="provider/profile" element={only(['provider'], <ProviderProfilePage />)} />

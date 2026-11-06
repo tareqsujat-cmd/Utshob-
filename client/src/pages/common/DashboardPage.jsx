@@ -6,6 +6,7 @@ import { Card, CardHeader } from '../../components/ui/Card.jsx';
 import { ButtonLink } from '../../components/ui/Button.jsx';
 import { LoadingState, ErrorState } from '../../components/ui/States.jsx';
 import { BookabilityPanel } from '../m1b-providers/BookabilityPanel.jsx';
+import { formatDateTime, formatTaka } from '../../components/ui/format.js';
 
 function greeting() {
   const hour = new Date().getHours();
@@ -54,8 +55,11 @@ export function DashboardPage() {
         <div className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <StatTile label="Unread notifications" value={data.summary.unreadNotifications} icon="bell" tone="accent" />
-            {user.role === 'host' && plan && (
-              <StatTile label="Current plan" value={plan.name} icon="card" hint={`${plan.limits.activeEvents} active event(s) allowed`} />
+            {user.role === 'host' && plan && data.summary.events && (
+              <>
+                <StatTile label="Active events" value={`${data.summary.events.active} / ${data.summary.events.limit}`} icon="calendar" hint={`${plan.name} plan`} />
+                <StatTile label="All my events" value={data.summary.events.total} icon="list" />
+              </>
             )}
             {user.role === 'admin' && (
               <>
@@ -75,9 +79,41 @@ export function DashboardPage() {
 
           {user.role === 'admin' && <AdminOverview summary={data.summary} roleLabels={meta?.roleLabels} />}
           {user.role === 'provider' && <ProviderOverview provider={data.summary.provider} />}
+          {user.role === 'host' && <HostOverview nextEvent={data.summary.nextEvent} />}
         </div>
       )}
     </div>
+  );
+}
+
+// M1-A: host home: the next event with its key numbers.
+function HostOverview({ nextEvent }) {
+  if (!nextEvent) {
+    return (
+      <Card>
+        <CardHeader title="No upcoming event" subtitle="Plan an event to set guests, budget, menu and invitations." />
+        <ButtonLink to="/events/new" icon="plus">Plan an event</ButtonLink>
+      </Card>
+    );
+  }
+  const remaining = nextEvent.budgetTotal - nextEvent.estimated;
+  return (
+    <Card>
+      <p className="text-xs font-semibold uppercase tracking-wider text-accent">Next event · {formatDateTime(nextEvent.startsAt)}</p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-semibold">{nextEvent.title}</h2>
+          <p className="text-sm text-muted">{nextEvent.location.district}, {nextEvent.location.division}</p>
+        </div>
+        <ButtonLink to={`/events/${nextEvent._id}`} icon="chevronRight">Open event</ButtonLink>
+      </div>
+      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatTile label="Budget" value={formatTaka(nextEvent.budgetTotal)} icon="wallet" />
+        <StatTile label="Estimated costs" value={formatTaka(nextEvent.estimated)} icon="chart" tone="accent" />
+        <StatTile label="Not yet allocated" value={formatTaka(remaining)} icon="sparkles" tone={remaining < 0 ? 'danger' : 'primary'} />
+        <StatTile label="Confirmed guests" value={`${nextEvent.confirmedGuests} / ${nextEvent.guestCount}`} icon="users" tone="success" />
+      </div>
+    </Card>
   );
 }
 
