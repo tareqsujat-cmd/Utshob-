@@ -72,7 +72,8 @@ Status codes used: 200 OK · 201 Created · 400 validation · 401 not logged in 
 | POST | /providers/me/credentials | provider | multipart (`file` ≤ 1 MB) |
 | GET | /providers/me/credentials | provider | list |
 | GET | /files/:id | owner, admin | stream file |
-| GET | /providers/:id | any | public profile: packages, reviewed credentials (type, reviewer, date, expiry) + disclaimer |
+| GET | /providers | host, admin (any logged-in) | directory of approved providers `?category, division, q` with `bookable`, `priceFrom` |
+| GET | /providers/:id | any | public profile: packages (non-archived), reviewed credentials (type, masked number, review date, expiry, valid) + bookability |
 | GET | /admin/credentials | admin | queue `?status=pending` |
 | PATCH | /admin/credentials/:id | admin | `{ status, note }` → audit |
 | POST | /admin/credentials/expiry-check | admin | flag upcoming bookings of providers with expired credentials (also runs lazily) |

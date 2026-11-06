@@ -119,3 +119,16 @@ Check and change happen in **one** atomic step. The naive version (read, check i
 **Vitest + Supertest + mongodb-memory-server**: Vitest runs the tests; Supertest sends HTTP requests to the Express app without opening a port; mongodb-memory-server starts a throwaway MongoDB for each test file.
 **`returnDocument: 'after'`**: option for `findOneAndUpdate` that returns the document *after* the update (Mongoose 9's replacement for the older `new: true`).
 **`select: false` / `.select('+field')`**: a schema field marked `select: false` (like `passwordHash`) is left out of query results unless a query explicitly asks for it with `+`.
+
+## File uploads and maps (M1-B)
+
+**multipart/form-data**: the request format browsers use to send files. Text fields and file bytes travel together in separate "parts". JSON can't carry raw files, which is why uploads use this format.
+**FormData**: the browser object that builds a multipart request: `formData.append('file', file)`. Our `api.post` sees a FormData and leaves the `Content-Type` for the browser to set.
+**multer**: Express middleware that reads multipart requests. `upload.single('file')` puts the bytes in `req.file.buffer` and the text fields in `req.body`; it also enforces the size and type limits.
+**Buffer**: Node's type for raw bytes (a file's contents). Mongoose stores it as binary data in the document.
+**Blob / object URL**: in the browser, a Blob is a chunk of downloaded bytes; `URL.createObjectURL(blob)` gives it a temporary `blob:` address that a tab can display. We use it to show protected PDFs that need the login token.
+**Sub-document**: an object inside an array in a Mongoose document (each package in `provider.packages`). It gets its own `_id`, and `provider.packages.id(packageId)` finds it.
+**Lazy check**: doing time-based work when someone looks instead of on a timer (e.g. the expiry check runs when an admin opens the review queue).
+**Leaflet `divIcon`**: a map marker drawn with HTML/CSS instead of an image file; we use it for our own teal pin.
+**OpenStreetMap tiles**: the map pictures Leaflet shows, downloaded from `tile.openstreetmap.org`; the attribution text in the corner is required.
+**Escaping a regex**: user text used in a MongoDB `$regex` search has symbols like `.` or `*` escaped first, so "a.b" searches for the literal text and can't break the query.

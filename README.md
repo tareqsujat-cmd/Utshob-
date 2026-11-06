@@ -55,8 +55,12 @@ All use the password **`Demo@1234`** (synthetic data). The login page also lists
 | Outreach coordinator | outreach@utshob.demo |
 | Volunteer | volunteer@utshob.demo · volunteer2@utshob.demo |
 | Pending coordinator (to demo approval) | pending.orphanage@utshob.demo |
+| Provider: venue (Shapla Convention Hall) | venue@utshob.demo |
+| Provider: caterer (Bhoj Caterers) | caterer@utshob.demo |
+| Provider: planner (Rongdhonu Decor & Events) | decor@utshob.demo |
+| Pending provider with documents to review (Nakshi Kitchen) | pending.provider@utshob.demo |
 
-Provider accounts are added with Module 1 (M1-B).
+13 more providers across all 8 divisions use `@providers.demo` emails (same password); they are background data for search.
 
 ## Tests
 ```bash

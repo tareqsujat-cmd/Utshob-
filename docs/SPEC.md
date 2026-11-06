@@ -75,14 +75,15 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 - [ ] Started/completed quantities are always preserved; units stay consistent with the menu item
 
 ### M1-B Provider management: 23201544 (Ridita)
-- [ ] Provider profile: business name, category (restaurant / caterer / venue / planner), description, address + map point, service areas (divisions/districts), capacity (venue min/max), outside catering allowed (venue), services/cuisine tags, setup and cleanup buffer hours (venue)
-- [ ] Packages: name, description, price per guest or flat price, min/max guests, included items (add / edit / archive)
-- [ ] Availability: blocked dates with reason (bookings also block, see M3-C)
-- [ ] Upload credentials: type (trade licence, food safety certificate, fire safety, other), number, expiry date, file (PDF/JPG/PNG, max 1 MB)
-- [ ] Admin credential review queue: view file, approve/reject with note, reviewer and date recorded
-- [ ] **Bookable rule**: account approved + approved, unexpired trade licence (+ food safety certificate for caterer/restaurant). If not bookable, quote requests and bookings are refused in the backend
-- [ ] Public provider page lists exactly which credentials were reviewed, by whom and when, plus the disclaimer "Credential review is not a guarantee of food quality"
-- [ ] Expired credential: new bookings blocked; existing upcoming bookings are flagged `needsReview` (lazy check + admin "run expiry check")
+- [x] Provider profile: business name, category (restaurant / caterer / venue / planner), description, address + map pin (Leaflet), service areas (divisions), capacity (min/max), outside catering allowed (venue), services/preference tags, setup and cleanup buffer hours (venue)
+- [x] Packages: name, description, price per guest or flat price, min/max guests, included items (add / edit / archive, never deleted)
+- [x] Availability: blocked dates with reason (bookings also block, see M3-C)
+- [x] Upload credentials: type (trade licence, food safety certificate, fire safety, other), number, issue/expiry date, file (PDF/JPG/PNG, max 1 MB, stored in MongoDB)
+- [x] Admin credential review queue: open file, approve/reject with note (guarded: reviewed once), reviewer and date recorded, audit + notification
+- [x] **Bookable rule**: account approved + every required document approved and unexpired (venue: trade licence + fire safety; caterer/restaurant: trade licence + food safety; planner: trade licence). `assertBookable()` is ready for M3-C to refuse quote requests/bookings in the backend
+- [x] Public provider page lists exactly which credentials were reviewed, when, and until when (masked number), plus the disclaimer that review is not a guarantee of food quality
+- [~] Expired credential: new bookings blocked (rule compares dates every time) and provider warned once (lazy + "Run expiry check"). Flagging existing upcoming bookings `needsReview` is added to `runExpiryCheck` in M3-C, when bookings exist
+- [x] Extra: provider directory for hosts (category, division, name filters) and provider dashboard cards
 
 ### M1-C Surplus food: 22301024 (Fiona)
 - [ ] Authorized posters (host for own event, approved caterer/restaurant) create listing: food type, quantity, unit, preparation time/method, packaging, reported storage condition, pickup location, pickup deadline, ingredients, allergens

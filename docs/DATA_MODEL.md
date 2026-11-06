@@ -123,10 +123,10 @@ Adjustment rule: only `updateOne({ _id, status: 'planned' }, …)`. If the batch
 | reviewCount, ratingAvg, completedBookings | denormalized counters updated on review/completion |
 
 Indexes: `{ category: 1, 'serviceAreas.division': 1 }`.
-**Bookable** (computed by `provider.service.isBookable`): user approved AND an approved, unexpired `trade_licence` AND (for caterer/restaurant) an approved, unexpired `food_safety`.
+**Bookable** (computed by `provider.service.evaluateBookability`): user approved AND every document in `REQUIRED_CREDENTIALS[category]` approved and unexpired: venue = trade licence + fire safety, caterer/restaurant = trade licence + food safety, planner = trade licence.
 
 ### credentials (M1-B)
-provider (ref providerprofiles), type (trade_licence / food_safety / fire_safety / other), number, issuedAt, expiresAt, file (ref files), status (pending / approved / rejected), reviewedBy, reviewedAt, reviewNote.
+provider (ref providerprofiles), type (trade_licence / food_safety / fire_safety / other), number, issuedAt, expiresAt, file (ref files), status (pending / approved / rejected), reviewedBy, reviewedAt, reviewNote, expiryNotifiedAt (set once by the expiry check; claimed atomically).
 Index: `{ provider: 1, type: 1 }`, `{ status: 1 }`.
 An expired approved credential stays `approved` (history preserved); "valid" = approved AND expiresAt > now.
 
