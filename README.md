@@ -24,6 +24,7 @@ Two Vercel projects are built from this one repository; every push to `main` red
 | `utshob-pu8r` (website) | `client` | Vite | `VITE_API_URL=https://utshob-gilt.vercel.app` |
 
 - The API runs as one serverless function (`server/api/index.js`, `server/vercel.json` rewrites every path to it); the Mongo connection is cached between requests (`server/config/db.js`).
+- `server/vercel.json` pins the function to **`sin1` (Singapore)**, the same region as the Atlas cluster. In Washington (the default) every database query cost ~220 ms extra and "Reset demo" took 37 s; in Singapore it takes 3 s.
 - `CLIENT_ORIGIN` must be the website URL (several allowed, comma-separated). Values are cleaned of stray spaces, line breaks and trailing `/`.
 - Database: Atlas database `utshob_tareq`, accessed by a user with `readWrite` on that database only, so other databases in the shared cluster can't be touched. The seed script also refuses to wipe a database containing collections that aren't ours.
 - After changing an environment variable in Vercel: **Deployments → ⋯ → Redeploy**.
