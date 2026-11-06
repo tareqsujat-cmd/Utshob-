@@ -143,3 +143,12 @@ Check and change happen in **one** atomic step. The naive version (read, check i
 **Discriminated union (zod)**: a list whose items can have different shapes, chosen by a `type` field: `{ type: 'update', from, to }` vs `{ type: 'add', quantity }`.
 **402 Payment Required**: the HTTP status we use when a plan limit or plan feature blocks an action; the body says which plan would allow it (`upgradeTo`).
 **Slug**: the readable part of a URL that identifies something, e.g. `/invite/wedding-reception-nusrat`. Ours end with random characters so they can't be guessed.
+
+## Surplus food (M1-C)
+
+**Race condition**: two requests read the same data at the same time, both decide "there's enough", and both write, so together they break a rule. Fixed by putting the check inside one atomic update.
+**`$expr`**: lets a MongoDB filter compare or calculate with the document's own fields, e.g. "quantityTotal minus quantityReserved is at least 40".
+**Rollback (manual)**: if step 2 of an operation fails after step 1 succeeded, undo step 1 (e.g. `$inc` the reserved quantity back) so the data stays consistent.
+**`crypto.randomUUID()`**: the browser's built-in random id generator, used for Idempotency-Key values.
+**Haversine formula**: computes the straight-line distance between two latitude/longitude points on the Earth (used for "4.7 km away").
+**Lock key (dedupe key)**: a value built from the parts that make two records "the same", stored with a unique index so the database refuses the second one.

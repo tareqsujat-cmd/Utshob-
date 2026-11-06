@@ -36,7 +36,7 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 ### C5. Cross-cutting
 - [x] Audit log written for important changes (who, when, why, field diffs)
 - [x] In-app notifications (bell icon, unread count, mark read)
-- [~] Event cancel/reschedule notifies organizers (M1-A); booked providers and surplus coordinators are added by M3-C / M1-C
+- [~] Event cancel/reschedule notifies organizers and coordinators with reservations (M1-A, M1-C); booked providers are added by M3-C
 - [~] `GET /api/meta`: divisions, districts, roles (units and categories are added by their features)
 - [x] Central error handler, helmet, rate limiting, CORS, `.env.example`
 
@@ -86,16 +86,16 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 - [x] Extra: provider directory for hosts (category, division, name filters) and provider dashboard cards
 
 ### M1-C Surplus food: 22301024 (Fiona)
-- [ ] Authorized posters (host for own event, approved caterer/restaurant) create listing: food type, quantity, unit, preparation time/method, packaging, reported storage condition, pickup location, pickup deadline, ingredients, allergens
-- [ ] **Missing-info flag** computed on save (e.g. "allergens not declared"), shown as a badge
-- [ ] **Duplicate prevention**: host and caterer cannot both list the same surplus for the same event (unique `dedupeKey`) → 409 with who listed it
-- [ ] Coordinators submit food request: food wanted, quantity, unit, receiving capacity, collection capacity, availability windows, dietary restrictions
-- [ ] **Matching**: open listings ranked for a request (same division/district, distance, deadline vs availability window, allergens vs restrictions, quantity fit); each match shows reasons and a suggested quantity
-- [ ] **Split**: one listing can be reserved in parts by several organizations
-- [ ] **Over-reservation blocked**: atomic `findOneAndUpdate` with an available-quantity guard (two simultaneous requests cannot exceed stock)
-- [ ] Idempotency-Key on reservation (double click does not create two reservations)
-- [ ] **Expired listings closed** to new reservations (deadline in the guard + lazy close)
-- [ ] Cancel reservation releases uncollected quantity back to the listing (if not expired)
+- [x] Authorized posters (host for own event, approved provider) create listing: food type, quantity, unit, preparation time/method, packaging, reported storage condition, pickup location (map pin), pickup deadline, ingredients, allergens
+- [x] **Missing-info flag** computed on save (allergens not declared, ingredients, preparation time, storage condition), shown as a badge and as a warning in matches
+- [x] **Duplicate prevention**: same food + same pickup place (~100 m) + same day = same `dedupeKey` (partial unique index), so host and caterer cannot both list it; 409 says who listed it
+- [x] Coordinators submit food request: quantity, unit, receiving capacity, collection capacity, availability windows, allergens to avoid
+- [x] **Matching**: open listings in the same division ranked (district, distance, collection window vs deadline, covers need); allergen conflicts hidden; each match shows reasons, warnings and a suggested quantity with its limiting factor
+- [x] **Split**: one listing can be reserved in parts by several organizations (becomes fully_reserved when nothing is left)
+- [x] **Over-reservation blocked**: atomic `findOneAndUpdate` with an available-quantity `$expr` guard (tested with simultaneous requests)
+- [x] Idempotency-Key on reservation (double click does not create two reservations)
+- [x] **Expired listings closed** to new reservations (deadline in the guard + lazy close)
+- [x] Cancel reservation releases uncollected quantity back to the listing (re-opens if before the deadline); event cancel/reschedule notifies coordinators with reservations
 
 ---
 

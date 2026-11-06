@@ -146,9 +146,10 @@ An expired approved credential stays `approved` (history preserved); "valid" = a
 | pickupLocation | { address, division, district, lat, lng } |
 | pickupDeadline | Date |
 | ingredients, allergens | [String] |
-| missingInfo | [String] computed on save, e.g. ['allergens', 'preparedAt'] |
+| allergensDeclared | Boolean: the poster confirmed the allergen list is complete (else flagged) |
+| missingInfo | [String] computed on save, e.g. ['allergens', 'preparation time'] |
 | status | open / fully_reserved / closed / cancelled / completed |
-| dedupeKey | `<eventId>:<normalized foodType>:<pickup date>`, or `<postedBy>:<foodType>:<date>` without event. **Unique partial (exists)**, unset when closed/cancelled |
+| dedupeKey | `<pickup day (Dhaka)>|<pin rounded to 3 decimals, or district:address>|<normalized foodType>`. **Unique partial (type string)**, `$unset` when closed/cancelled. Location-based so a host and a caterer at the same venue collide |
 
 Indexes: `{ status: 1, 'pickupLocation.division': 1, pickupDeadline: 1 }`, dedupeKey unique partial.
 **Reservation guard** (the key line of M1-C):
@@ -160,7 +161,7 @@ SurplusListing.findOneAndUpdate(
 ```
 
 ### foodrequests (M1-C)
-organization, coordinator, orgType (orphanage / outreach), foodTypesWanted [String], quantityNeeded, unit, receivingCapacity, collectionCapacity, availability [{ from, to }], dietaryRestrictions [String] (allergens to avoid), division, district, location, status (open / partially_matched / fulfilled / cancelled), quantityMatched.
+organization, coordinator, orgType (orphanage / outreach), title, notes, quantityNeeded, unit, receivingCapacity, collectionCapacity, availability [{ from, to }], avoidAllergens [String], division, district, location (copied from the organization), status (open / partially_matched / fulfilled / cancelled), quantityMatched.
 
 ### reservations (M1-C)
 listing, request, organization, coordinator, unit,
