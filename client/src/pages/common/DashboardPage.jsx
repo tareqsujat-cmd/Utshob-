@@ -78,6 +78,13 @@ export function DashboardPage() {
                 <StatTile label={`Open surplus in ${data.summary.coordinator.organization.division}`} value={data.summary.coordinator.listingsInDivision} icon="leaf" tone="warning" />
               </>
             )}
+            {data.summary.pickups && (
+              <>
+                <StatTile label="Active pickups" value={data.summary.pickups.active} icon="truck" tone="warning" />
+                <StatTile label="Pickups completed" value={data.summary.pickups.completed} icon="check" tone="success" />
+                <StatTile label="Telegram" value={data.summary.pickups.telegramConnected ? 'On' : 'Off'} icon="send" hint={data.summary.pickups.telegramConnected ? 'Reminders arrive on Telegram' : 'Connect it on your profile'} />
+              </>
+            )}
             {user.role === 'provider' && data.summary.provider && (
               <>
                 <StatTile label="Active packages" value={data.summary.provider.activePackages} icon="file" />
@@ -96,6 +103,7 @@ export function DashboardPage() {
               <div className="flex flex-wrap gap-2">
                 <ButtonLink to="/food-requests" icon="inbox">My food requests</ButtonLink>
                 <ButtonLink to="/surplus" variant="secondary" icon="leaf">Available surplus</ButtonLink>
+                <ButtonLink to="/tasks" variant="secondary" icon="truck">Collections ({data.summary.coordinator.activeCollections} active)</ButtonLink>
               </div>
             </Card>
           )}

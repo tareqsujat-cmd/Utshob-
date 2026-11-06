@@ -13,6 +13,9 @@ export const NAV_ITEMS = [
   { section: 'Share food', to: '/surplus/mine', label: 'My surplus', icon: 'leaf', roles: ['host', 'provider'] },
   { section: 'Food', to: '/food-requests', label: 'Food requests', icon: 'inbox', roles: ['orphanage_coordinator', 'outreach_coordinator'] },
   { section: 'Food', to: '/surplus', label: 'Available surplus', icon: 'leaf', roles: ['orphanage_coordinator', 'outreach_coordinator', 'admin'], end: true },
+  // M2-C: collection logistics
+  { section: 'Food', to: '/tasks', label: 'Collections', icon: 'truck', roles: ['orphanage_coordinator', 'outreach_coordinator', 'admin'] },
+  { section: 'Pickups', to: '/tasks', label: 'My pickups', icon: 'truck', roles: ['volunteer'] },
 
   // M1-B: provider's own business
   { section: 'My business', to: '/provider/profile', label: 'Business profile', icon: 'store', roles: ['provider'] },

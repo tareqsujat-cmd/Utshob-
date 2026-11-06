@@ -8,6 +8,7 @@ import { Input } from '../../components/ui/Field.jsx';
 import { Button } from '../../components/ui/Button.jsx';
 import { StatusBadge } from '../../components/ui/Badge.jsx';
 import { DivisionDistrictSelect } from '../../components/DivisionDistrictSelect.jsx';
+import { TelegramCard } from '../../components/TelegramCard.jsx';
 
 export function ProfilePage() {
   const { user } = useAuth();
@@ -21,6 +22,7 @@ export function ProfilePage() {
         <div className="space-y-6">
           <PasswordForm />
           {isCoordinator && <OrganizationForm />}
+          <TelegramCard />{/* M2-C */}
         </div>
       </div>
     </div>

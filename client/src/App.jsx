@@ -40,6 +40,8 @@ import { EventContributionsTab } from './pages/m2a-money/EventContributionsTab.j
 import { PaymentResultPage } from './pages/m2a-money/PaymentResultPage.jsx';
 // M2-B Provider search
 import { ProviderSearchPage } from './pages/m2b-search/ProviderSearchPage.jsx';
+// M2-C Collection logistics
+import { TasksPage } from './pages/m2c-collection/TasksPage.jsx';
 
 // Every page of the app and its URL. Pages inside <AppShell> get the sidebar and top bar.
 export default function App() {
@@ -80,6 +82,9 @@ export default function App() {
         <Route path="surplus/:id" element={<SurplusDetailPage />} />
         <Route path="food-requests" element={only(['orphanage_coordinator', 'outreach_coordinator'], <FoodRequestsPage />)} />
         <Route path="food-requests/:id/matches" element={only(['orphanage_coordinator', 'outreach_coordinator'], <MatchesPage />)} />
+
+        {/* M2-C */}
+        <Route path="tasks" element={only(['orphanage_coordinator', 'outreach_coordinator', 'volunteer', 'admin'], <TasksPage />)} />
 
         {/* M1-B */}
         <Route path="provider/profile" element={only(['provider'], <ProviderProfilePage />)} />
