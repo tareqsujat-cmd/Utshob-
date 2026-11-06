@@ -17,6 +17,8 @@ import { formatDateTime, formatTaka, toLocalInput, fromLocalInput } from '../../
 const TABS = [
   { to: '', label: 'Overview', icon: 'home' },
   { to: 'budget', label: 'Budget', icon: 'wallet' },
+  { to: 'expenses', label: 'Expenses & split', icon: 'chart' }, // M2-A
+  { to: 'contributions', label: 'Contributions', icon: 'gift' }, // M2-A
   { to: 'food', label: 'Food plan', icon: 'utensils' },
   { to: 'invitation', label: 'Invitation & RSVPs', icon: 'send' },
   { to: 'history', label: 'History', icon: 'clock' },

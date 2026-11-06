@@ -34,6 +34,10 @@ import { SurplusBrowsePage } from './pages/m1c-surplus/SurplusBrowsePage.jsx';
 import { SurplusDetailPage } from './pages/m1c-surplus/SurplusDetailPage.jsx';
 import { FoodRequestsPage } from './pages/m1c-surplus/FoodRequestsPage.jsx';
 import { MatchesPage } from './pages/m1c-surplus/MatchesPage.jsx';
+// M2-A Expenses and contributions (+ shared sandbox checkout result page)
+import { EventExpensesTab } from './pages/m2a-money/EventExpensesTab.jsx';
+import { EventContributionsTab } from './pages/m2a-money/EventContributionsTab.jsx';
+import { PaymentResultPage } from './pages/m2a-money/PaymentResultPage.jsx';
 
 // Every page of the app and its URL. Pages inside <AppShell> get the sidebar and top bar.
 export default function App() {
@@ -58,10 +62,14 @@ export default function App() {
         <Route path="events/:id" element={only(['host', 'admin'], <EventLayout />)}>
           <Route index element={<EventOverviewTab />} />
           <Route path="budget" element={<EventBudgetTab />} />
+          <Route path="expenses" element={<EventExpensesTab />} />
+          <Route path="contributions" element={<EventContributionsTab />} />
           <Route path="food" element={<EventFoodTab />} />
           <Route path="invitation" element={<EventInvitationTab />} />
           <Route path="history" element={<EventHistoryTab />} />
         </Route>
+
+        <Route path="payments/:tranId" element={<PaymentResultPage />} /> {/* shared sandbox checkout */}
 
         {/* M1-C */}
         <Route path="surplus/mine" element={only(['host', 'provider'], <SurplusMinePage />)} />

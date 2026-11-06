@@ -34,6 +34,8 @@ const STATUS_TONES = {
   open: 'primary',
   reserved: 'primary',
   partially_matched: 'primary',
+  partially_received: 'accent',
+  pledged: 'neutral',
   rejected: 'danger',
   cancelled: 'danger',
   failed: 'danger',
