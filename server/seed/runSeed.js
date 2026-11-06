@@ -5,6 +5,7 @@ import { Plan } from '../models/Plan.js';
 import { PLANS } from './data/plans.js';
 import { seedUsers, DEMO_PASSWORD } from './data/users.js';
 import { seedProviders } from './data/providers.js';
+import { seedEvents } from './data/events.js';
 
 // Safety check before wiping: if this database contains collections our app did not create,
 // it probably belongs to someone else (e.g. a teammate in a shared Atlas cluster). Stop.
@@ -36,11 +37,13 @@ export async function runSeed() {
   const plans = await Plan.insertMany(PLANS);
   const users = await seedUsers(passwordHash);
   const providers = await seedProviders(passwordHash, users.admin); // M1-B
+  const events = await seedEvents(users, providers); // M1-A
 
   return {
     plans: plans.length,
     users: Object.keys(users).length,
     providers: await mongoose.model('ProviderProfile').countDocuments(),
-    featuredProviders: Object.keys(providers).length,
+    events: Object.keys(events).filter((k) => !k.endsWith('Budget')).length,
+    rsvps: await mongoose.model('Rsvp').countDocuments(),
   };
 }
