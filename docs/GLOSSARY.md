@@ -132,3 +132,14 @@ Check and change happen in **one** atomic step. The naive version (read, check i
 **Leaflet `divIcon`**: a map marker drawn with HTML/CSS instead of an image file; we use it for our own teal pin.
 **OpenStreetMap tiles**: the map pictures Leaflet shows, downloaded from `tile.openstreetmap.org`; the attribution text in the corner is required.
 **Escaping a regex**: user text used in a MongoDB `$regex` search has symbols like `.` or `*` escaped first, so "a.b" searches for the literal text and can't break the query.
+
+## Events (M1-A)
+
+**Upsert**: "update, or insert if missing". `findOneAndUpdate(filter, update, { upsert: true })` changes the matching document, or creates one from the filter + update. With a unique index it guarantees one RSVP per phone per event.
+**Optimistic concurrency**: assume conflicts are rare; don't lock while someone edits. Instead, put the version you started from in the save filter. If someone saved first, your save matches nothing and you get 409 "reload".
+**Pure function**: a function whose output depends only on its inputs and that changes nothing else (no database, no globals). `suggestAdjustments(menu, batches, attendance)` is pure, which makes it easy to test.
+**State machine (status transitions)**: a fixed table of which status may follow which, e.g. `BATCH_TRANSITIONS = { planned: ['started', 'cancelled'], started: ['completed'] }`. Anything else is refused with 409.
+**`useOutletContext`**: lets child routes read values the parent layout passes to `<Outlet context={...}>`. The event layout loads the event once and every tab reads it from here.
+**Discriminated union (zod)**: a list whose items can have different shapes, chosen by a `type` field: `{ type: 'update', from, to }` vs `{ type: 'add', quantity }`.
+**402 Payment Required**: the HTTP status we use when a plan limit or plan feature blocks an action; the body says which plan would allow it (`upgradeTo`).
+**Slug**: the readable part of a URL that identifies something, e.g. `/invite/wedding-reception-nusrat`. Ours end with random characters so they can't be guessed.

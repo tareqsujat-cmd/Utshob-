@@ -39,7 +39,9 @@ Status codes used: 200 OK · 201 Created · 400 validation · 401 not logged in 
 | GET | /events | host | my events (owner or organizer); query `q, status, from, to` |
 | POST | /events | host, approved | Plan: active events |
 | GET | /events/:id | organizer | |
-| PATCH | /events/:id | organizer | `reason` required for guestCount/budgetTotal/startsAt/menu changes → audit |
+| PATCH | /events/:id | organizer | `reason` required for guestCount/budgetTotal/location/dietary/requiredServices changes → audit (dates change via /reschedule) |
+| POST | /events/:id/plan | organizer | draft -> planned (guarded) |
+| POST | /events/:id/complete | owner | planned -> completed (after start time) |
 | POST | /events/:id/copy | organizer | new draft; Plan: active events |
 | POST | /events/:id/cancel | owner | `{ reason }` → notifications, bookings flagged |
 | POST | /events/:id/reschedule | owner | `{ startsAt, endsAt, reason }` → notifications, venue recheck |
@@ -54,7 +56,8 @@ Status codes used: 200 OK · 201 Created · 400 validation · 401 not logged in 
 | GET | /public/invitations/:slug | **public** | invitation page data |
 | POST | /public/invitations/:slug/rsvp | **public** | upsert by phone (rate-limited) |
 | GET | /events/:id/rsvps | organizer | list + totals |
-| GET | /events/:id/food-plan | organizer | menu, batches, required vs planned per item |
+| PUT | /events/:id/menu | organizer | `{ menu, reason }`; reason required when changing an existing menu; unit can't change once batches exist |
+| GET | /events/:id/food-plan | organizer | `?attendance=`; menu, batches, required vs completed/started/planned per dish, confirmed RSVP count |
 | POST | /events/:id/batches | organizer | add batch (unit must match menu item) |
 | PATCH | /batches/:id/status | organizer | planned→started→completed / cancelled |
 | POST | /events/:id/food-plan/suggest | organizer | `{ attendance? }` → suggested changes to planned batches only |

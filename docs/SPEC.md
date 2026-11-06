@@ -36,7 +36,7 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 ### C5. Cross-cutting
 - [x] Audit log written for important changes (who, when, why, field diffs)
 - [x] In-app notifications (bell icon, unread count, mark read)
-- [ ] Event cancel/reschedule notifies organizers, booked providers and surplus coordinators (M1-A)
+- [~] Event cancel/reschedule notifies organizers (M1-A); booked providers and surplus coordinators are added by M3-C / M1-C
 - [~] `GET /api/meta`: divisions, districts, roles (units and categories are added by their features)
 - [x] Central error handler, helmet, rate limiting, CORS, `.env.example`
 
@@ -46,33 +46,33 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 
 ### M1-A Event management: 22201813 (Tareq)
 **Events**
-- [ ] Create event: title, type, start/end time, location (division, district, address), guest count, total budget, menu items, dietary requirements, required services
-- [ ] List and search my previous events (title text, status, date range)
-- [ ] Edit event; edits to guest count / budget / date / menu require a **reason** and appear in **requirement-change history**
-- [ ] Copy a previous event into a new **draft** (no bookings/RSVPs copied; banner: "Prices and availability may have changed")
-- [ ] Cancel (with reason) and reschedule (new date + reason) → notifications sent; bookings flagged for availability recheck; food/donation records preserved
-- [ ] Co-organizers: add/remove organizers (limit by plan, backend-enforced)
-- [ ] Active-event limit by plan enforced on create/copy
+- [x] Create event: title, type, start/end time, location (division, district, address, optional map pin), guest count, total budget, dietary requirements, required services (menu is edited on the Food plan tab)
+- [x] List and search my previous events (title text, status, date range)
+- [x] Edit event; edits to guest count / budget / location / dietary needs / services require a **reason** and appear in **requirement-change history** (menu changes too)
+- [x] Copy a previous event into a new **draft** (no bookings/RSVPs/batches copied; banner: "Prices and availability may have changed")
+- [~] Cancel (with reason) and reschedule (new date + reason): organizers notified; records preserved; cancelled/completed events read-only. Notifying booked providers / surplus coordinators and flagging bookings is added by M1-C and M3-C through `notifyEventParties`
+- [x] Co-organizers: add/remove by email (limit by plan, backend-enforced)
+- [x] Active-event limit by plan enforced on create/copy (402 + upgrade hint)
 
 **Budget**
-- [ ] Budget breakdown per category: food, venue, decoration, transport, other (editable)
-- [ ] Every edit creates a new **version** (who, when, why, source: manual / AI / quote approval); version history visible
-- [ ] Budget scenarios (e.g. "Standard", "Lean"); count limited by plan; one is primary
-- [ ] Summary compares: budget total vs estimated vs approved quotes vs recorded expenses
-- [ ] Alerts: **over budget** (total and per category), **missing charges** (a required service with no budget line or no quote)
+- [x] Budget breakdown per category: food, venue, decoration, transport, other (editable, with notes)
+- [x] Every edit creates a new **version** (who, when, why, source: initial / manual / copy / ai / quote_approval); version history visible; stale edits rejected (409)
+- [x] Budget scenarios (e.g. "Standard", "Lean"); count limited by plan; one is primary; side-by-side comparison
+- [~] Summary compares budget total vs estimated vs approved quotes vs recorded expenses (quotes come from M3-C, expenses from M2-A via `committedCosts`)
+- [x] Alerts: **over budget** (total, and per category vs quotes/expenses), **missing charges** (a required service with no budget line or quote), unallocated money
 
 **Invitations and RSVP**
-- [ ] Customize invitation: heading, message, theme (palette/font/layout from a small set), RSVP deadline, publish toggle
-- [ ] Public invitation page `/invite/:slug` (no login) where guests submit RSVP: name, phone, yes/no/maybe, party size, dietary notes
-- [ ] One RSVP per phone per event (re-submitting updates it, never duplicates)
-- [ ] Host sees RSVP list and totals (confirmed attendance)
+- [x] Customize invitation: heading, message, theme (palette/font/layout from a small set), RSVP deadline, publish toggle, live preview
+- [x] Public invitation page `/invite/:slug` (no login) where guests submit RSVP: name, phone, yes/no/maybe, party size, dietary notes (rate-limited)
+- [x] One RSVP per phone per event (re-submitting updates it, never duplicates; phone normalised)
+- [x] Host sees RSVP list and totals (confirmed attendance)
 
 **Food plan**
-- [ ] Menu items carry: unit (kg / portion / piece / litre), portion per guest, and portions-per-unit conversion flagged **"≈ estimated"**
-- [ ] Cooking batches: planned → started → completed (or cancelled)
-- [ ] "Attendance changed" → system computes required vs (completed + started + planned) and **suggests** changes only to **planned** batches
-- [ ] Applying the suggestion uses an atomic guard (`status: 'planned'`), so a batch that started meanwhile is never changed
-- [ ] Started/completed quantities are always preserved; units stay consistent with the menu item
+- [x] Menu items carry: unit (kg / portion / piece / litre), quantity per guest, and portions-per-unit conversion shown as **"≈ estimated"**
+- [x] Cooking batches: planned -> started -> completed (or planned -> cancelled); invalid transitions refused
+- [x] "Attendance changed" (expected, confirmed RSVPs or custom): system computes required vs (completed + started + planned) and **suggests** changes only to **planned** batches
+- [x] Applying the suggestion uses an atomic guard (`status: 'planned', quantity: from`), so a batch that started meanwhile is skipped, never changed
+- [x] Started/completed quantities are always preserved; units stay consistent with the menu item (unit change refused once batches exist)
 
 ### M1-B Provider management: 23201544 (Ridita)
 - [x] Provider profile: business name, category (restaurant / caterer / venue / planner), description, address + map pin (Leaflet), service areas (divisions), capacity (min/max), outside catering allowed (venue), services/preference tags, setup and cleanup buffer hours (venue)

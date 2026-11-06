@@ -49,7 +49,7 @@ Because labs come in order, **deploy a first version at the end of Phase 2** (no
 ## Phase 4: Module 3, Lab 7 (30–36 h)
 | Feature | Slices | Est. |
 |---|---|---|
-| **M3-D** Subscriptions (first: other gates depend on it) | plans page → checkout → verify → effective plan + lazy expiry → usage page → complete all limit/feature gates → tests | 5 h |
+| **M3-D** Subscriptions (first: other gates depend on it) | plans page → checkout → verify → effective plan + lazy expiry → usage page → complete all limit/feature gates → tests → **seed the demo host on Plus** so M1-A copy and a second budget scenario can be demonstrated | 5 h |
 | **M3-C** Quotes and bookings | quote requests → versions → compare → approve/reject + budget version → booking + venueslots overlap → deposit → cancel + history → provider cancel + alternatives → complete + review/response → tests (overlap, concurrent) → walkthrough | 9–10 h |
 | **M3-A** AI | gemini.service (JSON schema, timeout) → quota guard + refund → 3 suggestion types → approve/apply + reject → Estimate labels + manual fallback → walkthrough | 5–6 h |
 | **M3-E** Confirmation | orphanage form → outreach form → equations → dispute/resolve → points ledger + correction → impact summary → tests → walkthrough | 5–6 h |

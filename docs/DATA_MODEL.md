@@ -70,7 +70,7 @@ owner, filename, mimeType (pdf/png/jpeg), size (≤ 1 MB), data (Buffer). Served
 | location | { division, district, address, displayName, lat, lng, source: nominatim / manual } |
 | guestCount | Number (expected) |
 | budgetTotal | Number (BDT) |
-| menu | [{ _id, name, course, unit (kg/portion/piece/litre), portionPerGuest, portionsPerUnit, conversionIsEstimate: Boolean }] |
+| menu | [{ _id, name, course, unit (kg/portion/piece/litre), quantityPerGuest (in unit), portionsPerUnit (an estimate unless unit = portion) }] |
 | dietary | [{ label (vegetarian, halal, nut-free, diabetic …), guestCount }] |
 | requiredServices | [venue, catering, decoration, planner, transport] |
 | status | draft / planned / cancelled / completed |
@@ -95,7 +95,7 @@ Requirement-change history = `auditlogs` where entityType = 'event'.
 | versions | [{ version, lines, total, changedBy, reason, source: manual / ai / quote_approval, at }] |
 
 Index: `{ event: 1, name: 1 }` **unique**. Scenario count per event ≤ plan.limits.budgetScenarios.
-Update rule: push the old state into `versions`, `$inc version`, guarded by `{ _id, version: <the version the user edited> }`, so two people editing at once cannot silently overwrite each other (optimistic concurrency).
+`versions` holds every version including the current one. Update rule (`saveNewVersion`): one `findOneAndUpdate({ _id, version: expected }, { $set lines, $inc version, $push versions })`, so two people editing at once cannot silently overwrite each other (optimistic concurrency, 409).
 
 ### rsvps (M1-A)
 event, guestName, contact (normalized phone), response (yes / no / maybe), partySize, dietaryNotes, respondedAt.
