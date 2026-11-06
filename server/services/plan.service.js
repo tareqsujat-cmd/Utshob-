@@ -29,10 +29,16 @@ async function cheapestPlanWhere(test) {
 
 // Throws 402 if adding one more item would go over the plan limit.
 // Example: await assertWithinLimit(user, 'activeEvents', currentActiveCount)
-export async function assertWithinLimit(user, limitName, currentCount) {
+export function assertWithinLimit(user, limitName, currentCount) {
+  return assertCountAllowed(user, limitName, currentCount + 1);
+}
+
+// Throws 402 if `newCount` items would be more than the plan allows.
+// Example: await assertCountAllowed(owner, 'organizers', newOrganizerList.length)
+export async function assertCountAllowed(user, limitName, newCount) {
   const plan = await getEffectivePlan(user);
   const limit = plan.limits[limitName];
-  if (currentCount < limit) return plan;
+  if (newCount <= limit) return plan;
 
   const upgrade = await cheapestPlanWhere((p) => p.limits[limitName] > limit);
   throw httpError(

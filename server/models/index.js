@@ -10,3 +10,8 @@ export * from './Plan.js';
 export * from './File.js';
 export * from './Credential.js';
 export * from './ProviderProfile.js';
+// M1-A
+export * from './Event.js';
+export * from './Budget.js';
+export * from './Rsvp.js';
+export * from './CookingBatch.js';

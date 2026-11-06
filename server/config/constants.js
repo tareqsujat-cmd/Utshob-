@@ -105,6 +105,38 @@ export const PROVIDER_TAG_LABELS = {
   delivery: 'Delivery',
 };
 
+// ---- M1-A Events ----
+export const EVENT_TYPES = ['wedding', 'birthday', 'corporate', 'religious', 'community', 'other'];
+export const EVENT_TYPE_LABELS = {
+  wedding: 'Wedding', birthday: 'Birthday', corporate: 'Corporate', religious: 'Religious (iftar, puja, milad …)',
+  community: 'Community', other: 'Other',
+};
+export const EVENT_STATUSES = ['draft', 'planned', 'cancelled', 'completed'];
+export const ACTIVE_EVENT_STATUSES = ['draft', 'planned']; // these count against the plan limit
+
+export const BUDGET_CATEGORIES = ['food', 'venue', 'decoration', 'transport', 'other'];
+export const BUDGET_CATEGORY_LABELS = { food: 'Food', venue: 'Venue', decoration: 'Decoration', transport: 'Transport', other: 'Other' };
+
+// Services an event may need, and the budget line each one is paid from.
+export const REQUIRED_SERVICES = ['venue', 'catering', 'decoration', 'transport'];
+export const SERVICE_LABELS = { venue: 'Venue', catering: 'Catering', decoration: 'Decoration / planning', transport: 'Transport' };
+export const SERVICE_BUDGET_CATEGORY = { venue: 'venue', catering: 'food', decoration: 'decoration', transport: 'transport' };
+
+export const FOOD_UNITS = ['portion', 'kg', 'piece', 'litre'];
+export const MENU_COURSES = ['starter', 'main', 'side', 'dessert', 'drink'];
+export const DIETARY_LABELS = {
+  vegetarian: 'Vegetarian', vegan: 'Vegan', halal: 'Halal only', diabetic: 'Diabetic', nut_allergy: 'Nut allergy',
+  gluten_free: 'Gluten free', other: 'Other',
+};
+export const BATCH_STATUSES = ['planned', 'started', 'completed', 'cancelled'];
+// Which status changes are allowed for a cooking batch.
+export const BATCH_TRANSITIONS = { planned: ['started', 'cancelled'], started: ['completed'], completed: [], cancelled: [] };
+
+// Invitation designs: a small fixed set the host (or the AI in M3-A) can choose from.
+export const INVITATION_PALETTES = ['marigold', 'teal', 'rose', 'night'];
+export const INVITATION_FONTS = ['classic', 'modern'];
+export const INVITATION_LAYOUTS = ['centered', 'banner'];
+
 // Uploaded documents: allowed file types and size.
 export const UPLOAD_MIME_TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
 export const UPLOAD_MAX_BYTES = 1024 * 1024; // 1 MB
