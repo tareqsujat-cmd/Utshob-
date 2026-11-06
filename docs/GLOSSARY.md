@@ -164,3 +164,11 @@ Check and change happen in **one** atomic step. The naive version (read, check i
 **Pledged vs received**: promised money vs money that actually arrived. Kept in two fields so promises are never counted as money.
 **`$addToSet`**: adds a value to an array only if it isn't already there. We remember which payments were applied to a contribution.
 **`vi.spyOn(globalThis, 'fetch')`**: in tests, replaces `fetch` with a fake that returns prepared answers, so we can test the gateway flow without the internet.
+
+## Location search (M2-B)
+
+**Geocoding / reverse geocoding**: turning an address into coordinates / coordinates into an address.
+**Throttle**: making calls wait so they are at least a minimum time apart (Nominatim: 1 per second).
+**In-memory cache (`Map`)**: remembering answers in the server's memory for a while, so repeated questions don't call the API again. On serverless, each warm instance has its own cache.
+**Hard filter vs soft flag**: a hard filter removes an option; a soft flag keeps it but warns and ranks it lower.
+**`fitBounds`**: a Leaflet map method that zooms and pans so all given points are visible.

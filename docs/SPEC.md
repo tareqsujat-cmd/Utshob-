@@ -118,15 +118,15 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 - [x] Sponsorship fulfilment tracking (Pro+, backend-gated)
 
 ### M2-B Provider search (API: Nominatim): 23201544 (Ridita)
-- [ ] Location search box → backend proxy to Nominatim (Bangladesh only, timeout, cache, proper User-Agent, **search on submit, not autocomplete**, per usage policy)
-- [ ] User picks a result, sees it on a Leaflet map, can **drag the pin to correct** it and confirm
-- [ ] **Manual fallback**: division/district/address form when Nominatim fails or has no result (visible message)
-- [ ] Criteria: date, guest count, budget, categories, services, preferences (e.g. halal, vegetarian options)
-- [ ] Up to **10 providers per category**, only bookable ones; **"Why this matches"** reasons on each card
-- [ ] "Only N providers matched" message when fewer than 10
-- [ ] Review count + **"Limited history"** label (fewer than 3 completed bookings)
-- [ ] Venue capacity check (guest count vs capacity) and outside-catering restriction (if the chosen venue forbids outside catering, caterer results are flagged)
-- [ ] Results on a Leaflet map + list; "Request quote" from a card (links to M3-C)
+- [x] Location search box -> backend proxy to Nominatim (Bangladesh only, 6 s timeout, 24 h cache, 1 req/s throttle, identifying User-Agent, **search on submit, not autocomplete**); OSM names mapped to our divisions/districts
+- [x] User picks a result, sees it on a Leaflet map, can **drag the pin to correct** it (reverse lookup) and confirm division/district in dropdowns
+- [x] **Manual fallback**: division/district/address fields always available; visible notice when Nominatim fails or finds nothing
+- [x] Criteria: date, guest count, per-category budgets, categories, required services, preferences; "fill from my event" (budget lines -> budgets)
+- [x] Up to **10 providers per category**, only bookable ones; **"Why this matches"** reasons on each card
+- [x] "Only N providers matched" note when fewer than 10, plus counts of hidden providers by reason
+- [~] Review count + **"Limited history"** label (< 3 completed bookings). Labels work; real reviews/completed bookings arrive with M3-C
+- [x] Venue capacity check (too small / minimum above guests) and outside-catering restriction (in-house-only venues flagged; caterers flagged after "Use as my venue")
+- [x] Results on a Leaflet map (numbered, colour per category) + list; links to the provider profile (quote request comes with M3-C)
 
 ### M2-C Collection logistics (API: Telegram): 22301024 (Fiona)
 - [ ] Coordinator assigns a collector to a reservation: volunteer user or organization-arranged collector (name/phone), scheduled time
