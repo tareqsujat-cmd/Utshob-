@@ -8,6 +8,11 @@ export const NAV_ITEMS = [
   { section: 'Plan', to: '/events', label: 'All events', icon: 'calendar', roles: ['admin'] },
   { section: 'Plan', to: '/providers', label: 'Provider directory', icon: 'store', roles: ['host', 'admin'], end: true },
 
+  // M1-C: share surplus (hosts, providers) / receive it (coordinators)
+  { section: 'Share food', to: '/surplus/mine', label: 'My surplus', icon: 'leaf', roles: ['host', 'provider'] },
+  { section: 'Food', to: '/food-requests', label: 'Food requests', icon: 'inbox', roles: ['orphanage_coordinator', 'outreach_coordinator'] },
+  { section: 'Food', to: '/surplus', label: 'Available surplus', icon: 'leaf', roles: ['orphanage_coordinator', 'outreach_coordinator', 'admin'], end: true },
+
   // M1-B: provider's own business
   { section: 'My business', to: '/provider/profile', label: 'Business profile', icon: 'store', roles: ['provider'] },
   { section: 'My business', to: '/provider/packages', label: 'Packages & prices', icon: 'file', roles: ['provider'] },

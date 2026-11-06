@@ -27,6 +27,13 @@ import { EventFoodTab } from './pages/m1a-events/EventFoodTab.jsx';
 import { EventInvitationTab } from './pages/m1a-events/EventInvitationTab.jsx';
 import { EventHistoryTab } from './pages/m1a-events/EventHistoryTab.jsx';
 import { PublicInvitationPage } from './pages/m1a-events/PublicInvitationPage.jsx';
+// M1-C Surplus food
+import { SurplusMinePage } from './pages/m1c-surplus/SurplusMinePage.jsx';
+import { SurplusFormPage } from './pages/m1c-surplus/SurplusFormPage.jsx';
+import { SurplusBrowsePage } from './pages/m1c-surplus/SurplusBrowsePage.jsx';
+import { SurplusDetailPage } from './pages/m1c-surplus/SurplusDetailPage.jsx';
+import { FoodRequestsPage } from './pages/m1c-surplus/FoodRequestsPage.jsx';
+import { MatchesPage } from './pages/m1c-surplus/MatchesPage.jsx';
 
 // Every page of the app and its URL. Pages inside <AppShell> get the sidebar and top bar.
 export default function App() {
@@ -55,6 +62,14 @@ export default function App() {
           <Route path="invitation" element={<EventInvitationTab />} />
           <Route path="history" element={<EventHistoryTab />} />
         </Route>
+
+        {/* M1-C */}
+        <Route path="surplus/mine" element={only(['host', 'provider'], <SurplusMinePage />)} />
+        <Route path="surplus/new" element={only(['host', 'provider'], <SurplusFormPage />)} />
+        <Route path="surplus" element={only(['orphanage_coordinator', 'outreach_coordinator', 'admin'], <SurplusBrowsePage />)} />
+        <Route path="surplus/:id" element={<SurplusDetailPage />} />
+        <Route path="food-requests" element={only(['orphanage_coordinator', 'outreach_coordinator'], <FoodRequestsPage />)} />
+        <Route path="food-requests/:id/matches" element={only(['orphanage_coordinator', 'outreach_coordinator'], <MatchesPage />)} />
 
         {/* M1-B */}
         <Route path="provider/profile" element={only(['provider'], <ProviderProfilePage />)} />

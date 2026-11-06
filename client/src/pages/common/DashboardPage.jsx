@@ -68,6 +68,16 @@ export function DashboardPage() {
                 <StatTile label="Approved organizations" value={data.summary.approvedOrganizations} icon="home" tone="success" />
               </>
             )}
+            {data.summary.surplus && (
+              <StatTile label="My open surplus listings" value={data.summary.surplus.openListings} icon="leaf" tone="success" />
+            )}
+            {data.summary.coordinator && (
+              <>
+                <StatTile label="Open food requests" value={data.summary.coordinator.openRequests} icon="inbox" />
+                <StatTile label="Active reservations" value={data.summary.coordinator.activeReservations} icon="check" tone="success" />
+                <StatTile label={`Open surplus in ${data.summary.coordinator.organization.division}`} value={data.summary.coordinator.listingsInDivision} icon="leaf" tone="warning" />
+              </>
+            )}
             {user.role === 'provider' && data.summary.provider && (
               <>
                 <StatTile label="Active packages" value={data.summary.provider.activePackages} icon="file" />
@@ -80,6 +90,15 @@ export function DashboardPage() {
           {user.role === 'admin' && <AdminOverview summary={data.summary} roleLabels={meta?.roleLabels} />}
           {user.role === 'provider' && <ProviderOverview provider={data.summary.provider} />}
           {user.role === 'host' && <HostOverview nextEvent={data.summary.nextEvent} />}
+          {data.summary.coordinator && user.approvalStatus === 'approved' && (
+            <Card>
+              <CardHeader title={data.summary.coordinator.organization.name} subtitle="Find surplus that fits what you can receive and carry." />
+              <div className="flex flex-wrap gap-2">
+                <ButtonLink to="/food-requests" icon="inbox">My food requests</ButtonLink>
+                <ButtonLink to="/surplus" variant="secondary" icon="leaf">Available surplus</ButtonLink>
+              </div>
+            </Card>
+          )}
         </div>
       )}
     </div>

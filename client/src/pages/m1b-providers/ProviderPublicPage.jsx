@@ -16,7 +16,7 @@ export function ProviderPublicPage() {
   const meta = useMeta();
   const { data, loading, error, reload } = useFetch(`/providers/${id}`);
 
-  if (loading || !meta) return <LoadingState />;
+  if ((loading && !data) || !meta) return <LoadingState />;
   if (error) return <ErrorState error={error} onRetry={reload} />;
 
   const { provider, bookability, reviewedCredentials } = data;

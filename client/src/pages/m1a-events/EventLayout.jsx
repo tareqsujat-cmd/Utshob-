@@ -33,7 +33,7 @@ export function EventLayout() {
   const [dialog, setDialog] = useState(null); // 'cancel' | 'reschedule' | 'copy'
   const [actionError, setActionError] = useState(null);
 
-  if (loading || !meta) return <LoadingState />;
+  if ((loading && !data) || !meta) return <LoadingState />; // reloads keep showing the old data
   if (error) return <ErrorState error={error} onRetry={reload} />;
 
   const { event, permissions } = data;

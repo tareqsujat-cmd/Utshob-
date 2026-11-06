@@ -26,7 +26,10 @@ export function EventBudgetTab() {
     scenarios.reload();
   };
 
-  if (summary.loading || scenarios.loading || !meta) return <LoadingState />;
+  if (!summary.data || !scenarios.data || !meta) {
+    if (summary.error || scenarios.error) return <ErrorState error={summary.error || scenarios.error} onRetry={reloadAll} />;
+    return <LoadingState />;
+  }
   if (summary.error || scenarios.error) return <ErrorState error={summary.error || scenarios.error} onRetry={reloadAll} />;
 
   const s = summary.data;
