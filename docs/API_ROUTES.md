@@ -109,7 +109,8 @@ Checkout is started by the feature routes (`/contributions/:id/checkout`, `/book
 | POST | /payments/sslcommerz/fail | **public** | mark failed → redirect |
 | POST | /payments/sslcommerz/cancel | **public** | mark cancelled → redirect |
 | POST | /payments/sslcommerz/ipn | **public** | same confirm logic (works only on the deployed URL) |
-| GET | /payments/:tranId | payer | status for the result page |
+| GET | /payments/:tranId | payer, admin | status for the result page |
+| POST | /payments/:tranId/verify | payer, admin | "Check status": asks the gateway by tran_id and confirms (idempotent) |
 
 ## M2-A Expenses and contributions
 

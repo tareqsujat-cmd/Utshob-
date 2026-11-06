@@ -152,3 +152,15 @@ Check and change happen in **one** atomic step. The naive version (read, check i
 **`crypto.randomUUID()`**: the browser's built-in random id generator, used for Idempotency-Key values.
 **Haversine formula**: computes the straight-line distance between two latitude/longitude points on the Earth (used for "4.7 km away").
 **Lock key (dedupe key)**: a value built from the parts that make two records "the same", stored with a unique index so the database refuses the second one.
+
+## Money and payments (M2-A, shared checkout)
+
+**Payment gateway**: a service (here SSLCOMMERZ) that shows the payment page and moves the money; sandbox mode uses test cards and no real money.
+**Callback / redirect**: after paying, the gateway sends the user's browser back to a URL we gave it (`success_url`), with the transaction details in a form POST.
+**IPN (Instant Payment Notification)**: the gateway also calls our server directly, server to server. It only works on a public URL, not on localhost.
+**Server-side validation**: we never trust what the browser posts ("status=VALID" can be faked). Our server asks the gateway's validation API, using our secret store password, and compares tran_id, amount and currency with our own record.
+**`tran_id` / `val_id`**: our unique id for the payment / the gateway's id for a successful payment, used to validate it.
+**303 See Other**: an HTTP redirect that tells the browser "now GET this other page". We use it after a form POST callback.
+**Pledged vs received**: promised money vs money that actually arrived. Kept in two fields so promises are never counted as money.
+**`$addToSet`**: adds a value to an array only if it isn't already there. We remember which payments were applied to a contribution.
+**`vi.spyOn(globalThis, 'fetch')`**: in tests, replaces `fetch` with a fake that returns prepared answers, so we can test the gateway flow without the internet.

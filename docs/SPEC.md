@@ -58,7 +58,7 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 - [x] Budget breakdown per category: food, venue, decoration, transport, other (editable, with notes)
 - [x] Every edit creates a new **version** (who, when, why, source: initial / manual / copy / ai / quote_approval); version history visible; stale edits rejected (409)
 - [x] Budget scenarios (e.g. "Standard", "Lean"); count limited by plan; one is primary; side-by-side comparison
-- [~] Summary compares budget total vs estimated vs approved quotes vs recorded expenses (quotes come from M3-C, expenses from M2-A via `committedCosts`)
+- [~] Summary compares budget total vs estimated vs approved quotes vs recorded expenses (expenses done via `committedCosts`; approved quotes come with M3-C)
 - [x] Alerts: **over budget** (total, and per category vs quotes/expenses), **missing charges** (a required service with no budget line or quote), unallocated money
 
 **Invitations and RSVP**
@@ -102,19 +102,20 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 ## MODULE 2 (Lab 6)
 
 ### Shared S1. Sandbox checkout (owner: 23201544 Ridita, built at the start of Module 2 because M2-A needs it)
-- [ ] `payments` collection with unique `tranId`
-- [ ] SSLCOMMERZ init → redirect to gateway → success/fail/cancel callbacks → **backend validation API** check (amount, currency, status) → idempotent confirm → side effect applied once
-- [ ] Payment status page in the client; fallback message if gateway unreachable
+- [x] `payments` collection with unique `tranId`
+- [x] SSLCOMMERZ init -> redirect to gateway -> success/fail/cancel/IPN callbacks -> **backend validation API** check (status, tran_id, amount, currency) -> idempotent confirm -> side effect applied once (tested with a fake gateway)
+- [x] Payment result page in the client with "Check status" (query by tran_id) fallback; 503 + disabled button with explanation when not configured; 502 + manual fallback when the gateway is down
+- [ ] Real sandbox round trip verified (waiting for SSLCOMMERZ store credentials)
 
 ### M2-A Expenses and contributions: 22201813 (Tareq)
-- [ ] Record expenses (category, description, amount, paid by, date, optional booking link); void with reason (no delete)
-- [ ] Cost groups (e.g. "Bride's family", "Groom's family") and split method: **equal** (all plans), **percentage / custom amounts** (Plus+, backend-gated)
-- [ ] Validation: percentages sum to 100, custom amounts sum to total
-- [ ] Split summary per group: share owed, received, **outstanding**
-- [ ] Contributions: cash, in-kind (description, quantity, unit, estimated value), sponsorship (sponsor, offer, promised benefits; Plus+)
-- [ ] **Pledged and received kept in separate fields**; status pledged → partially received → received / cancelled
-- [ ] Record manual cash receipt, or **pay via shared sandbox checkout** (S1); payment applied to the contribution exactly once
-- [ ] Sponsorship fulfilment tracking (Pro+)
+- [x] Record expenses (category, description, amount, paid by person/group, date); void with reason (no delete); feeds the budget summary ("spent", spent-over-estimate alert)
+- [x] Cost groups (e.g. "Bride's family", "Groom's family") and split method: **equal** (all plans), **percentage / custom amounts** (Plus+, backend-gated 402)
+- [x] Validation: percentages sum to 100, custom amounts sum to total expenses (warning if expenses change later)
+- [x] Split summary per group: share, paid to vendors, contributed (received only), **outstanding** (or paid extra)
+- [x] Contributions: cash, in-kind (description, quantity, unit, estimated value), sponsorship (sponsor, offer, promised benefits; Plus+)
+- [x] **Pledged and received kept in separate fields** (also for goods: quantity vs receivedQuantity); status pledged -> partially received -> received / cancelled; receiving more than pledged refused (atomic guard)
+- [~] Record manual cash/goods receipt (done), or **pay via shared sandbox checkout** (built + tested with a fake gateway; real sandbox run waits for credentials); payment applied to the contribution exactly once
+- [x] Sponsorship fulfilment tracking (Pro+, backend-gated)
 
 ### M2-B Provider search (API: Nominatim): 23201544 (Ridita)
 - [ ] Location search box → backend proxy to Nominatim (Bangladesh only, timeout, cache, proper User-Agent, **search on submit, not autocomplete**, per usage policy)
