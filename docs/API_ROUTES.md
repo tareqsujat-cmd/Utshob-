@@ -147,8 +147,9 @@ Checkout is started by the feature routes (`/contributions/:id/checkout`, `/book
 | GET | /tasks | coordinator (org), volunteer (assigned) | `?status=` |
 | PATCH | /tasks/:id/status | coordinator, assigned volunteer | `{ status, quantityCollected?, delayMinutes?, reason? }`; valid transitions only |
 | POST | /tasks/reminders/send-due | coordinator, admin, or cron (`x-cron-secret`) | collection reminders are never plan-gated; dedupeKey per reminder |
-| GET | /notifications/telegram-log | coordinator, admin | failed/sent Telegram deliveries for my tasks |
-| POST | /notifications/:id/retry | coordinator, admin | re-send same notification (guarded: status failed → pending) |
+| POST | /notifications/:id/retry | coordinator, admin | re-send the same notification (guarded claim failed -> sending) |
+| GET | /cron/reminders | Vercel Cron (`Authorization: Bearer CRON_SECRET`) | daily reminder run |
+| GET | /telegram/status | any | configured? connected? bot username |
 | POST | /telegram/link | any | generate link code + bot username |
 | POST | /telegram/verify | any | reads getUpdates, stores chatId |
 | DELETE | /telegram/link | any | unsubscribe |

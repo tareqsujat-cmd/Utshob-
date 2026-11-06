@@ -31,7 +31,7 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 - [x] Approval queue: provider accounts and community organizations (approve/reject with reason)
 - [x] Audit log viewer (who / what / when / why, filter by entity type and action)
 - [x] "Reset demo" button (re-runs the seed)
-- [~] Demo fault toggle: "Simulate Telegram outage" (stored in `appsettings`). The switch works; its effect is wired in M2-C
+- [x] Demo fault toggle: "Simulate Telegram outage" (stored in `appsettings`), used by M2-C
 
 ### C5. Cross-cutting
 - [x] Audit log written for important changes (who, when, why, field diffs)
@@ -129,15 +129,15 @@ Roles: `host` · `provider` · `orphanage_coordinator` · `outreach_coordinator`
 - [x] Results on a Leaflet map (numbered, colour per category) + list; links to the provider profile (quote request comes with M3-C)
 
 ### M2-C Collection logistics (API: Telegram): 22301024 (Fiona)
-- [ ] Coordinator assigns a collector to a reservation: volunteer user or organization-arranged collector (name/phone), scheduled time
-- [ ] Only one active task per reservation (unique `activeKey`); Idempotency-Key on assign
-- [ ] Task statuses: assigned → en route → collected / partially collected; or delayed (minutes + reason), cancelled, missed
-- [ ] Partial collection records collected quantity and shortage; cancelled/missed release the uncollected quantity
-- [ ] Telegram linking: user gets a code, sends `/start CODE` to the bot, clicks Verify (backend reads `getUpdates`)
-- [ ] Assignment and status updates → in-app notification **always**; Telegram message if subscribed
-- [ ] "Send due reminders" (button + cron endpoint with secret); one reminder per task schedule (dedupe key)
-- [ ] Telegram failures logged (status, attempts, error); **Retry** re-sends the same notification and never creates a new task
-- [ ] Dashboard task list works with Telegram down (demo: admin "Simulate Telegram outage" toggle)
+- [x] Coordinator assigns a collector to a reservation: volunteer user or organization-arranged collector (name/phone), scheduled time
+- [x] Only one active task per reservation (unique `activeKey`, tested with simultaneous assigns); Idempotency-Key on assign
+- [x] Task statuses: assigned -> en route -> collected / partially collected; or delayed (minutes + reason), cancelled, missed; invalid transitions refused; volunteers can't cancel/miss
+- [x] Partial collection records collected quantity and shortage; missed releases the uncollected quantity to the listing; cancelled frees the reservation for a new collector
+- [~] Telegram linking: code -> `/start CODE` to the bot -> Verify (reads `getUpdates`). Built and tested with a fake Telegram; real run waits for the bot token
+- [x] Assignment and status updates -> in-app notification **always**; Telegram message if connected
+- [x] "Send due reminders" (button + daily Vercel Cron with secret); one reminder per task (claim + dedupe key)
+- [x] Telegram failures logged per notification (status, attempts, error); **Retry** re-sends the same notification and never creates a new task
+- [x] Dashboard task list works with Telegram down (admin "Simulate Telegram outage" switch, tested)
 
 ---
 

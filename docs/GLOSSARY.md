@@ -172,3 +172,12 @@ Check and change happen in **one** atomic step. The naive version (read, check i
 **In-memory cache (`Map`)**: remembering answers in the server's memory for a while, so repeated questions don't call the API again. On serverless, each warm instance has its own cache.
 **Hard filter vs soft flag**: a hard filter removes an option; a soft flag keeps it but warns and ranks it lower.
 **`fitBounds`**: a Leaflet map method that zooms and pans so all given points are visible.
+
+## Telegram and collections (M2-C)
+
+**Bot API**: Telegram's HTTPS interface for bots: `sendMessage` sends text; `getUpdates` returns recent messages people sent to the bot.
+**chat id**: Telegram's number for a conversation; a bot can only message chats that wrote to it first.
+**Webhook vs polling**: with a webhook Telegram calls our public URL for every message; with polling (`getUpdates`) we ask when we need to. We poll only when the user presses Verify, so localhost works.
+**Fallback channel**: the in-app notification is the main record; Telegram is an extra copy that may fail without breaking anything.
+**Fault injection**: switching on a deliberate failure (the demo outage switch) to show error handling.
+**Cron job**: a task run on a schedule (Vercel Cron calls a URL daily). Protected by a secret header.
