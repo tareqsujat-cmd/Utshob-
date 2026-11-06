@@ -1,4 +1,3 @@
-import bcrypt from 'bcryptjs';
 import { User } from '../../models/User.js';
 import { Organization } from '../../models/Organization.js';
 
@@ -30,10 +29,9 @@ const DEMO_USERS = [
   },
 ];
 
-// Creates the users (and coordinators' organizations). Returns them keyed by `key`,
-// e.g. users.host, so later seed steps can refer to them.
-export async function seedUsers() {
-  const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
+// Creates the users (and coordinators' organizations). passwordHash = the hashed demo password.
+// Returns them keyed by `key`, e.g. users.host, so later seed steps can refer to them.
+export async function seedUsers(passwordHash) {
   const users = {};
 
   for (const demo of DEMO_USERS) {

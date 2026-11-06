@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 import '../models/index.js'; // registers every model
 import { Plan } from '../models/Plan.js';
 import { PLANS } from './data/plans.js';
-import { seedUsers } from './data/users.js';
+import { seedUsers, DEMO_PASSWORD } from './data/users.js';
+import { seedProviders } from './data/providers.js';
 
 // Safety check before wiping: if this database contains collections our app did not create,
 // it probably belongs to someone else (e.g. a teammate in a shared Atlas cluster). Stop.
@@ -30,8 +32,15 @@ export async function runSeed() {
   }
 
   // 2) Insert in dependency order (users before the records that point to them).
+  const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10); // hashed once, shared by all demo accounts
   const plans = await Plan.insertMany(PLANS);
-  const users = await seedUsers();
+  const users = await seedUsers(passwordHash);
+  const providers = await seedProviders(passwordHash, users.admin); // M1-B
 
-  return { plans: plans.length, users: Object.keys(users).length };
+  return {
+    plans: plans.length,
+    users: Object.keys(users).length,
+    providers: await mongoose.model('ProviderProfile').countDocuments(),
+    featuredProviders: Object.keys(providers).length,
+  };
 }
