@@ -46,6 +46,67 @@ export const DIVISIONS = {
 
 export const DIVISION_NAMES = Object.keys(DIVISIONS);
 
+// Approximate centre of each division, used to centre maps.
+export const DIVISION_CENTERS = {
+  Dhaka: { lat: 23.8103, lng: 90.4125 },
+  Chattogram: { lat: 22.3569, lng: 91.7832 },
+  Rajshahi: { lat: 24.3745, lng: 88.6042 },
+  Khulna: { lat: 22.8456, lng: 89.5403 },
+  Barishal: { lat: 22.701, lng: 90.3535 },
+  Sylhet: { lat: 24.8949, lng: 91.8687 },
+  Rangpur: { lat: 25.7439, lng: 89.2752 },
+  Mymensingh: { lat: 24.7471, lng: 90.4203 },
+};
+
 export const ORGANIZATION_TYPES = ['orphanage', 'outreach'];
+
+// ---- M1-B Providers ----
+export const PROVIDER_CATEGORIES = ['venue', 'caterer', 'restaurant', 'planner'];
+export const PROVIDER_CATEGORY_LABELS = {
+  venue: 'Venue',
+  caterer: 'Caterer',
+  restaurant: 'Restaurant',
+  planner: 'Event planner / decorator',
+};
+
+export const CREDENTIAL_TYPES = ['trade_licence', 'food_safety', 'fire_safety', 'other'];
+export const CREDENTIAL_LABELS = {
+  trade_licence: 'Trade licence',
+  food_safety: 'Food safety certificate',
+  fire_safety: 'Fire safety certificate',
+  other: 'Other document',
+};
+
+// Documents a provider needs (approved and not expired) before it may accept bookings.
+export const REQUIRED_CREDENTIALS = {
+  venue: ['trade_licence', 'fire_safety'],
+  caterer: ['trade_licence', 'food_safety'],
+  restaurant: ['trade_licence', 'food_safety'],
+  planner: ['trade_licence'],
+};
+
+// Services and preferences a provider can offer (used for search in M2-B).
+export const PROVIDER_TAGS = [
+  'halal', 'vegetarian_options', 'vegan_options', 'air_conditioned', 'parking', 'decoration',
+  'live_cooking', 'outdoor_space', 'wheelchair_access', 'sound_system', 'photography', 'delivery',
+];
+export const PROVIDER_TAG_LABELS = {
+  halal: 'Halal',
+  vegetarian_options: 'Vegetarian options',
+  vegan_options: 'Vegan options',
+  air_conditioned: 'Air-conditioned',
+  parking: 'Parking',
+  decoration: 'Decoration',
+  live_cooking: 'Live cooking',
+  outdoor_space: 'Outdoor space',
+  wheelchair_access: 'Wheelchair access',
+  sound_system: 'Sound system',
+  photography: 'Photography',
+  delivery: 'Delivery',
+};
+
+// Uploaded documents: allowed file types and size.
+export const UPLOAD_MIME_TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
+export const UPLOAD_MAX_BYTES = 1024 * 1024; // 1 MB
 
 export const APPROVAL_STATUSES = ['pending', 'approved', 'rejected'];

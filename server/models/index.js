@@ -6,3 +6,7 @@ export * from './AuditLog.js';
 export * from './Notification.js';
 export * from './AppSetting.js';
 export * from './Plan.js';
+// M1-B
+export * from './File.js';
+export * from './Credential.js';
+export * from './ProviderProfile.js';

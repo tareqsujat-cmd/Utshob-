@@ -3,6 +3,7 @@ import authRoutes from './auth.routes.js';
 import adminRoutes from './admin.routes.js';
 import { usersRouter, organizationsRouter } from './users.routes.js';
 import { metaRouter, dashboardRouter, notificationsRouter } from './common.routes.js';
+import { providersRouter, filesRouter, adminCredentialsRouter } from './m1b.providers.routes.js';
 
 // The whole API in one place: every URL prefix and the router that handles it.
 const api = Router();
@@ -16,6 +17,11 @@ api.use('/users', usersRouter);
 api.use('/organizations', organizationsRouter);
 api.use('/notifications', notificationsRouter);
 api.use('/dashboard', dashboardRouter);
+api.use('/admin/credentials', adminCredentialsRouter); // before /admin (more specific path first)
 api.use('/admin', adminRoutes);
+
+// Module 1
+api.use('/providers', providersRouter); // M1-B
+api.use('/files', filesRouter); // M1-B uploaded documents
 
 export default api;
