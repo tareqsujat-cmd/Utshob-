@@ -12,7 +12,8 @@ const notificationSchema = new mongoose.Schema(
     readAt: { type: Date, default: null },
     relatedTask: { type: mongoose.Schema.Types.ObjectId, ref: 'CollectionTask' },
     telegram: {
-      status: { type: String, enum: ['skipped', 'pending', 'sent', 'failed'], default: 'skipped' },
+      // skipped = user not connected to Telegram; sending = an attempt is in progress
+      status: { type: String, enum: ['skipped', 'pending', 'sending', 'sent', 'failed'], default: 'skipped' },
       attempts: { type: Number, default: 0 },
       lastError: String,
       lastAttemptAt: Date,

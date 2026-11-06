@@ -23,3 +23,4 @@ export * from './Reservation.js';
 export * from './Payment.js'; // shared sandbox checkout
 export * from './Expense.js'; // M2-A
 export * from './Contribution.js'; // M2-A
+export * from './CollectionTask.js'; // M2-C
