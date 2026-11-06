@@ -6,15 +6,30 @@ dotenv.config({ quiet: true });
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
+// Values pasted into a dashboard can pick up invisible characters (a line break, a space,
+// a zero-width character) or a trailing "/". In an HTTP header those break every response,
+// so URLs keep only visible characters (ASCII 0x21-0x7E) and lose any trailing slash.
+export function cleanUrl(value) {
+  return String(value).replace(/[^\x21-\x7E]/g, '').replace(/\/+$/, '');
+}
+
+// CLIENT_ORIGIN may list several allowed websites separated by commas,
+// e.g. "https://utshob-pu8r.vercel.app,http://localhost:5173".
+const clientOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173')
+  .split(',')
+  .map(cleanUrl)
+  .filter(Boolean);
+
 export const env = {
   nodeEnv,
   isTest: nodeEnv === 'test',
   port: Number(process.env.PORT) || 5000,
-  mongoUri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/utshob',
-  jwtSecret: process.env.JWT_SECRET || (nodeEnv === 'test' ? 'test-secret' : ''),
+  mongoUri: cleanUrl(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/utshob'),
+  jwtSecret: (process.env.JWT_SECRET || (nodeEnv === 'test' ? 'test-secret' : '')).trim(),
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
-  clientOrigin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
-  serverPublicUrl: process.env.SERVER_PUBLIC_URL || 'http://localhost:5000',
+  clientOrigins, // every website allowed to call the API (CORS)
+  clientOrigin: clientOrigins[0], // the main website, used for redirects (e.g. after payment)
+  serverPublicUrl: cleanUrl(process.env.SERVER_PUBLIC_URL || 'http://localhost:5000'),
   demoMode: process.env.DEMO_MODE === 'true',
   cronSecret: process.env.CRON_SECRET || '',
   gemini: {

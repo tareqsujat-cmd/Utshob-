@@ -13,7 +13,7 @@ const app = express();
 
 app.set('trust proxy', 1); // behind Vercel's proxy: lets rate limiting see the real client IP
 app.use(helmet()); // safe HTTP headers
-app.use(cors({ origin: env.clientOrigin })); // only our React app may call the API from a browser
+app.use(cors({ origin: env.clientOrigins })); // only our React app(s) may call the API from a browser
 app.use(express.json({ limit: '1mb' })); // parse JSON bodies
 app.use(express.urlencoded({ extended: false })); // parse form posts (payment gateway callbacks)
 
