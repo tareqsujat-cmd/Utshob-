@@ -17,6 +17,11 @@ app.use(cors({ origin: env.clientOrigin })); // only our React app may call the 
 app.use(express.json({ limit: '1mb' })); // parse JSON bodies
 app.use(express.urlencoded({ extended: false })); // parse form posts (payment gateway callbacks)
 
+// Friendly message when someone opens the API's address in a browser.
+app.get('/', (req, res) => {
+  res.json({ service: 'UTSHOB API', status: 'running', health: '/api/health' });
+});
+
 app.use('/api', apiLimiter);
 
 // Make sure the database is connected before any route runs (cached after the first time).
