@@ -6,6 +6,8 @@ import { metaRouter, dashboardRouter, notificationsRouter } from './common.route
 import { providersRouter, filesRouter, adminCredentialsRouter } from './m1b.providers.routes.js';
 import { eventsRouter, budgetsRouter, batchesRouter, publicRouter } from './m1a.events.routes.js';
 import { surplusRouter, foodRequestsRouter, reservationsRouter } from './m1c.surplus.routes.js';
+import { moneyRouter } from './m2a.money.routes.js';
+import { paymentsRouter } from './payments.routes.js';
 
 // The whole API in one place: every URL prefix and the router that handles it.
 const api = Router();
@@ -32,5 +34,9 @@ api.use('/files', filesRouter); // M1-B uploaded documents
 api.use('/surplus', surplusRouter); // M1-C
 api.use('/food-requests', foodRequestsRouter); // M1-C
 api.use('/reservations', reservationsRouter); // M1-C
+
+// Module 2
+api.use('/payments', paymentsRouter); // shared sandbox checkout (SSLCOMMERZ)
+api.use(moneyRouter); // M2-A: /events/:id/expenses, /expenses/:id, /events/:id/contributions, /contributions/:id ...
 
 export default api;

@@ -58,6 +58,7 @@ export async function getEvent(req, res) {
     event,
     permissions: {
       isOwner: isOwner(event, req.user),
+      isOrganizer: isOrganizer(event, req.user), // may record money (M2-A) in any status
       canEdit: isOrganizer(event, req.user) && ['draft', 'planned'].includes(event.status),
     },
   });

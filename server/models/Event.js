@@ -39,6 +39,12 @@ const eventSchema = new mongoose.Schema(
     status: { type: String, enum: EVENT_STATUSES, default: 'planned' },
     cancelReason: { type: String, default: '' },
     copiedFrom: { type: mongoose.Schema.Types.ObjectId, ref: 'Event' },
+    // M2-A: how costs are shared between groups (e.g. the two families).
+    // equal = everyone the same (all plans); percentage / custom amounts = Plus plan and above.
+    costSplit: {
+      method: { type: String, enum: ['equal', 'percentage', 'custom'], default: 'equal' },
+      groups: [{ _id: false, name: String, percentage: Number, fixedAmount: Number }],
+    },
     invitation: {
       slug: String, // public address: /invite/<slug>
       heading: { type: String, default: '' },

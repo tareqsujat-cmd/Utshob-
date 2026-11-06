@@ -1,4 +1,6 @@
+import mongoose from 'mongoose';
 import { Budget } from '../models/Budget.js';
+import { Expense } from '../models/Expense.js';
 import {
   BUDGET_CATEGORIES, BUDGET_CATEGORY_LABELS, SERVICE_BUDGET_CATEGORY, SERVICE_LABELS,
 } from '../config/constants.js';
@@ -57,9 +59,15 @@ export async function saveNewVersion(budgetId, expectedVersion, lines, { user, r
 }
 
 // Money already committed per category by other features: { food: 50000, venue: 70000 }.
-// M3-C fills `quotes` (approved quotations) and M2-A fills `expenses` (recorded expenses).
-export async function committedCosts(/* eventId */) {
-  return { quotes: {}, expenses: {} };
+// `expenses` comes from M2-A (recorded, not void). M3-C fills `quotes` (approved quotations).
+export async function committedCosts(eventId) {
+  const rows = await Expense.aggregate([
+    { $match: { event: new mongoose.Types.ObjectId(String(eventId)), status: 'recorded' } },
+    { $group: { _id: '$category', total: { $sum: '$amount' } } },
+  ]);
+  const expenses = {};
+  for (const row of rows) expenses[row._id] = row.total;
+  return { quotes: {}, expenses };
 }
 
 // The budget overview for one event: per category estimate vs approved quotes vs spending,

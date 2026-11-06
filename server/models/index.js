@@ -19,3 +19,7 @@ export * from './CookingBatch.js';
 export * from './SurplusListing.js';
 export * from './FoodRequest.js';
 export * from './Reservation.js';
+// Module 2
+export * from './Payment.js'; // shared sandbox checkout
+export * from './Expense.js'; // M2-A
+export * from './Contribution.js'; // M2-A
