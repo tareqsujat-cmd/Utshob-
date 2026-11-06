@@ -10,6 +10,9 @@ import { Rsvp } from '../models/Rsvp.js';
 import { countActiveEvents } from '../services/event.service.js';
 import { totalOf } from '../services/budget.service.js';
 import { getEffectivePlan } from '../services/plan.service.js';
+import { SurplusListing } from '../models/SurplusListing.js';
+import { FoodRequest } from '../models/FoodRequest.js';
+import { Reservation } from '../models/Reservation.js';
 
 // GET /api/dashboard: numbers for the home page cards of the logged-in user's role.
 // Each feature adds its own numbers here as it is built.
@@ -50,6 +53,22 @@ export async function getDashboard(req, res) {
         confirmedGuests: rsvpYes[0]?.guests || 0,
       };
     }
+  }
+
+  // M1-C: surplus food
+  if (['host', 'provider'].includes(user.role)) {
+    summary.surplus = {
+      openListings: await SurplusListing.countDocuments({ postedBy: user._id, status: { $in: ['open', 'fully_reserved'] } }),
+    };
+  }
+  if (user.organization) {
+    const org = await Organization.findById(user.organization).select('division name type');
+    summary.coordinator = {
+      organization: org,
+      openRequests: await FoodRequest.countDocuments({ organization: org._id, status: { $in: ['open', 'partially_matched'] } }),
+      activeReservations: await Reservation.countDocuments({ organization: org._id, status: 'reserved' }),
+      listingsInDivision: await SurplusListing.countDocuments({ status: 'open', 'pickupLocation.division': org.division, pickupDeadline: { $gt: new Date() } }),
+    };
   }
 
   // M1-B: a provider's business status

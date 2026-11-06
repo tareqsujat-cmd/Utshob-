@@ -5,6 +5,7 @@ import { usersRouter, organizationsRouter } from './users.routes.js';
 import { metaRouter, dashboardRouter, notificationsRouter } from './common.routes.js';
 import { providersRouter, filesRouter, adminCredentialsRouter } from './m1b.providers.routes.js';
 import { eventsRouter, budgetsRouter, batchesRouter, publicRouter } from './m1a.events.routes.js';
+import { surplusRouter, foodRequestsRouter, reservationsRouter } from './m1c.surplus.routes.js';
 
 // The whole API in one place: every URL prefix and the router that handles it.
 const api = Router();
@@ -28,5 +29,8 @@ api.use('/batches', batchesRouter); // M1-A
 api.use('/public', publicRouter); // M1-A invitations (no login)
 api.use('/providers', providersRouter); // M1-B
 api.use('/files', filesRouter); // M1-B uploaded documents
+api.use('/surplus', surplusRouter); // M1-C
+api.use('/food-requests', foodRequestsRouter); // M1-C
+api.use('/reservations', reservationsRouter); // M1-C
 
 export default api;

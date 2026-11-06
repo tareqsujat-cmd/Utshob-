@@ -39,6 +39,13 @@ export function getMeta(req, res) {
     invitationPalettes: C.INVITATION_PALETTES,
     invitationFonts: C.INVITATION_FONTS,
     invitationLayouts: C.INVITATION_LAYOUTS,
+    // M1-C surplus
+    allergens: C.ALLERGENS,
+    allergenLabels: C.ALLERGEN_LABELS,
+    storageConditions: C.STORAGE_CONDITIONS,
+    storageLabels: C.STORAGE_LABELS,
+    packagingTypes: C.PACKAGING_TYPES,
+    packagingLabels: C.PACKAGING_LABELS,
   });
 }
 

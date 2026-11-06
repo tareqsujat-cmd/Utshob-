@@ -1,4 +1,6 @@
 import { Event } from '../models/Event.js';
+import { SurplusListing } from '../models/SurplusListing.js';
+import { Reservation } from '../models/Reservation.js';
 import { ACTIVE_EVENT_STATUSES } from '../config/constants.js';
 import { notifyUsers } from './notify.service.js';
 import { httpError } from '../utils/httpError.js';
@@ -38,9 +40,14 @@ export function countActiveEvents(ownerId) {
   return Event.countDocuments({ owner: ownerId, status: { $in: ACTIVE_EVENT_STATUSES } });
 }
 
-// Tell everyone involved in an event about a change, except the person who made it.
-// Today: the other organizers. M1-C adds coordinators with reservations, M3-C adds booked providers.
+// Tell everyone involved in an event about a change, except the person who made it:
+// the other organizers, and coordinators holding reservations on its surplus food (M1-C).
+// M3-C adds booked providers.
 export async function notifyEventParties(event, actor, { type, title, body }) {
-  const recipients = event.organizers.filter((id) => !sameId(id, actor._id));
-  return notifyUsers(recipients, { type, title, body, link: `/events/${event._id}` });
+  const organizers = event.organizers.filter((id) => !sameId(id, actor._id));
+  await notifyUsers(organizers, { type, title, body, link: `/events/${event._id}` });
+
+  const listingIds = await SurplusListing.find({ event: event._id }).distinct('_id');
+  const coordinators = await Reservation.find({ listing: { $in: listingIds }, status: 'reserved' }).distinct('coordinator');
+  await notifyUsers(coordinators, { type, title, body, link: '/food-requests' });
 }
