@@ -11,6 +11,23 @@ CSE471 (System Analysis and Design) · Group 08 · Section 03 · Fall 2026.
 
 > This README grows with each phase. Feature → files/routes table, architecture diagram and deploy guide are completed in Phase 5–6.
 
+## Live demo
+- Website: **https://utshob-pu8r.vercel.app**
+- API: https://utshob-gilt.vercel.app (health check: `/api/health`)
+
+## Deployment (Vercel + MongoDB Atlas)
+Two Vercel projects are built from this one repository; every push to `main` redeploys both.
+
+| Vercel project | Root directory | Preset | Environment variables |
+|---|---|---|---|
+| `utshob` (API, `utshob-gilt.vercel.app`) | `server` | Other | `MONGODB_URI`, `JWT_SECRET`, `DEMO_MODE=true`, `CLIENT_ORIGIN` |
+| `utshob-pu8r` (website) | `client` | Vite | `VITE_API_URL=https://utshob-gilt.vercel.app` |
+
+- The API runs as one serverless function (`server/api/index.js`, `server/vercel.json` rewrites every path to it); the Mongo connection is cached between requests (`server/config/db.js`).
+- `CLIENT_ORIGIN` must be the website URL (several allowed, comma-separated). Values are cleaned of stray spaces, line breaks and trailing `/`.
+- Database: Atlas database `utshob_tareq`, accessed by a user with `readWrite` on that database only, so other databases in the shared cluster can't be touched. The seed script also refuses to wipe a database containing collections that aren't ours.
+- After changing an environment variable in Vercel: **Deployments → ⋯ → Redeploy**.
+
 ## Stack
 MongoDB + Mongoose · Express 5 · React 19 + Vite · TailwindCSS 4 · React Router · Leaflet/OpenStreetMap · Vitest + Supertest + mongodb-memory-server.
 External APIs: Gemini, Nominatim, Telegram Bot API, SSLCOMMERZ sandbox.
