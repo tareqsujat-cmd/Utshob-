@@ -38,6 +38,8 @@ import { MatchesPage } from './pages/m1c-surplus/MatchesPage.jsx';
 import { EventExpensesTab } from './pages/m2a-money/EventExpensesTab.jsx';
 import { EventContributionsTab } from './pages/m2a-money/EventContributionsTab.jsx';
 import { PaymentResultPage } from './pages/m2a-money/PaymentResultPage.jsx';
+// M2-B Provider search
+import { ProviderSearchPage } from './pages/m2b-search/ProviderSearchPage.jsx';
 
 // Every page of the app and its URL. Pages inside <AppShell> get the sidebar and top bar.
 export default function App() {
@@ -85,6 +87,7 @@ export default function App() {
         <Route path="provider/availability" element={only(['provider'], <ProviderAvailabilityPage />)} />
         <Route path="provider/credentials" element={only(['provider'], <ProviderCredentialsPage />)} />
         <Route path="providers" element={only(['host', 'admin'], <ProviderDirectoryPage />)} />
+        <Route path="providers/search" element={only(['host', 'admin'], <ProviderSearchPage />)} /> {/* M2-B */}
         <Route path="providers/:id" element={<ProviderPublicPage />} />
         <Route path="admin/credentials" element={only(['admin'], <AdminCredentialsPage />)} />
 

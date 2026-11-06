@@ -6,6 +6,7 @@ export const NAV_ITEMS = [
   // Plan an event (hosts)
   { section: 'Plan', to: '/events', label: 'My events', icon: 'calendar', roles: ['host'] },
   { section: 'Plan', to: '/events', label: 'All events', icon: 'calendar', roles: ['admin'] },
+  { section: 'Plan', to: '/providers/search', label: 'Find providers', icon: 'search', roles: ['host', 'admin'] }, // M2-B
   { section: 'Plan', to: '/providers', label: 'Provider directory', icon: 'store', roles: ['host', 'admin'], end: true },
 
   // M1-C: share surplus (hosts, providers) / receive it (coordinators)
