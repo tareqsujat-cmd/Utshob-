@@ -28,7 +28,9 @@ export function errorHandler(err, req, res, next) {
     message = 'Request body is not valid JSON';
   }
 
-  if (status >= 500) {
+  // Unexpected errors (no status set by us) hide their details from the user.
+  // Deliberate ones like httpError(502, 'gateway down…') keep their helpful message.
+  if (!err.status && status >= 500) {
     console.error(err);
     message = 'Something went wrong on the server';
   }
