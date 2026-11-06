@@ -71,6 +71,23 @@ export const api = {
   delete: (path, options) => request('DELETE', path, null, options),
 };
 
+// Opens a protected file (e.g. an uploaded licence) in a new tab.
+// A plain <a href> can't send the login token, so we download it with fetch and show the result.
+export async function openFile(fileId) {
+  const tab = window.open('', '_blank'); // open right away (inside the click) so pop-up blockers allow it
+  const response = await fetch(`${BASE_URL}/api/files/${fileId}`, {
+    headers: { Authorization: `Bearer ${getToken()}` },
+  });
+  if (!response.ok) {
+    tab?.close();
+    throw new ApiError('Could not open the file', response.status);
+  }
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob); // a temporary local address for the downloaded file
+  if (tab) tab.location.href = url;
+  else window.location.href = url;
+}
+
 // Turns [{ field, message }] into { field: message } so forms can show errors under inputs.
 export function fieldErrors(error) {
   const result = {};

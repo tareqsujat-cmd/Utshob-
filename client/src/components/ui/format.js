@@ -23,6 +23,16 @@ export function formatDateTime(value) {
   });
 }
 
+// Provider package price: "৳850 per guest" or "৳70,000 flat"
+export function formatPackagePrice(pkg) {
+  return `${formatTaka(pkg.price)} ${pkg.pricingType === 'per_guest' ? 'per guest' : 'flat'}`;
+}
+
+// Days from today until a date (negative = in the past)
+export function daysUntil(value) {
+  return Math.ceil((new Date(value).getTime() - Date.now()) / (24 * 60 * 60 * 1000));
+}
+
 // -> "5 min ago", "3 h ago", "2 days ago"
 export function timeAgo(value) {
   const seconds = Math.floor((Date.now() - new Date(value).getTime()) / 1000);
