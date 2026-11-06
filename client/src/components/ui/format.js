@@ -33,6 +33,26 @@ export function daysUntil(value) {
   return Math.ceil((new Date(value).getTime() - Date.now()) / (24 * 60 * 60 * 1000));
 }
 
+// Date <-> the text an <input type="datetime-local"> uses ("2026-12-12T18:00", in local time).
+export function toLocalInput(value) {
+  if (!value) return '';
+  const d = new Date(value);
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+export function fromLocalInput(text) {
+  return text ? new Date(text).toISOString() : '';
+}
+// Date -> "2026-12-12" for <input type="date">
+export function toDateInput(value) {
+  return value ? toLocalInput(value).slice(0, 10) : '';
+}
+
+// 54.6 -> "54.6", 70 -> "70" (no long decimals in quantities)
+export function formatQty(n) {
+  return String(Math.round(n * 100) / 100);
+}
+
 // -> "5 min ago", "3 h ago", "2 days ago"
 export function timeAgo(value) {
   const seconds = Math.floor((Date.now() - new Date(value).getTime()) / 1000);
