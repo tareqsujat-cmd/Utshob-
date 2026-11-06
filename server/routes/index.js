@@ -9,6 +9,7 @@ import { surplusRouter, foodRequestsRouter, reservationsRouter } from './m1c.sur
 import { moneyRouter } from './m2a.money.routes.js';
 import { paymentsRouter } from './payments.routes.js';
 import { geoRouter, providerSearchRouter } from './m2b.search.routes.js';
+import { collectionRouter } from './m2c.collection.routes.js';
 
 // The whole API in one place: every URL prefix and the router that handles it.
 const api = Router();
@@ -41,5 +42,6 @@ api.use('/payments', paymentsRouter); // shared sandbox checkout (SSLCOMMERZ)
 api.use('/geo', geoRouter); // M2-B Nominatim
 api.use('/providers', providerSearchRouter); // M2-B POST /providers/search
 api.use(moneyRouter); // M2-A: /events/:id/expenses, /expenses/:id, /events/:id/contributions, /contributions/:id ...
+api.use(collectionRouter); // M2-C: /tasks, /reservations/:id/tasks, /volunteers, /telegram/*, /notifications/:id/retry
 
 export default api;

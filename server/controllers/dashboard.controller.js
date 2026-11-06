@@ -13,6 +13,8 @@ import { getEffectivePlan } from '../services/plan.service.js';
 import { SurplusListing } from '../models/SurplusListing.js';
 import { FoodRequest } from '../models/FoodRequest.js';
 import { Reservation } from '../models/Reservation.js';
+import { CollectionTask } from '../models/CollectionTask.js';
+import { ACTIVE_TASK_STATUSES } from '../config/constants.js';
 
 // GET /api/dashboard: numbers for the home page cards of the logged-in user's role.
 // Each feature adds its own numbers here as it is built.
@@ -69,6 +71,18 @@ export async function getDashboard(req, res) {
       activeReservations: await Reservation.countDocuments({ organization: org._id, status: 'reserved' }),
       listingsInDivision: await SurplusListing.countDocuments({ status: 'open', 'pickupLocation.division': org.division, pickupDeadline: { $gt: new Date() } }),
     };
+  }
+
+  // M2-C: a volunteer's pickups
+  if (user.role === 'volunteer') {
+    summary.pickups = {
+      active: await CollectionTask.countDocuments({ 'collector.user': user._id, status: { $in: ACTIVE_TASK_STATUSES } }),
+      completed: await CollectionTask.countDocuments({ 'collector.user': user._id, status: { $in: ['collected', 'partially_collected'] } }),
+      telegramConnected: Boolean(user.telegram?.chatId),
+    };
+  }
+  if (user.organization) {
+    summary.coordinator.activeCollections = await CollectionTask.countDocuments({ organization: user.organization, status: { $in: ACTIVE_TASK_STATUSES } });
   }
 
   // M1-B: a provider's business status

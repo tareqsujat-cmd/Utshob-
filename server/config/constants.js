@@ -156,6 +156,20 @@ export const LISTING_STATUSES = ['open', 'fully_reserved', 'closed', 'cancelled'
 export const REQUEST_STATUSES = ['open', 'partially_matched', 'fulfilled', 'cancelled'];
 export const RESERVATION_STATUSES = ['reserved', 'collection_assigned', 'collected', 'partially_collected', 'cancelled', 'missed', 'closed'];
 
+// ---- M2-C Collection logistics ----
+export const ACTIVE_TASK_STATUSES = ['assigned', 'en_route', 'delayed'];
+// Which status may follow which (anything else is refused).
+export const TASK_TRANSITIONS = {
+  assigned: ['en_route', 'delayed', 'collected', 'partially_collected', 'cancelled', 'missed'],
+  en_route: ['delayed', 'collected', 'partially_collected', 'cancelled', 'missed'],
+  delayed: ['en_route', 'collected', 'partially_collected', 'cancelled', 'missed'],
+  collected: [],
+  partially_collected: [],
+  cancelled: [],
+  missed: [],
+};
+export const REMINDER_WINDOW_HOURS = 3; // remind about pickups starting within the next 3 hours
+
 // Uploaded documents: allowed file types and size.
 export const UPLOAD_MIME_TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
 export const UPLOAD_MAX_BYTES = 1024 * 1024; // 1 MB
