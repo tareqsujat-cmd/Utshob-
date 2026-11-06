@@ -7,6 +7,7 @@ import { seedUsers, DEMO_PASSWORD } from './data/users.js';
 import { seedProviders } from './data/providers.js';
 import { seedEvents } from './data/events.js';
 import { seedSurplus } from './data/surplus.js';
+import { seedMoney } from './data/money.js';
 
 // Safety check before wiping: if this database contains collections our app did not create,
 // it probably belongs to someone else (e.g. a teammate in a shared Atlas cluster). Stop.
@@ -40,6 +41,7 @@ export async function runSeed() {
   const providers = await seedProviders(passwordHash, users.admin); // M1-B
   const events = await seedEvents(users, providers); // M1-A
   await seedSurplus(users, providers, events); // M1-C
+  await seedMoney(users, events); // M2-A
 
   return {
     plans: plans.length,
@@ -49,5 +51,7 @@ export async function runSeed() {
     rsvps: await mongoose.model('Rsvp').countDocuments(),
     surplusListings: await mongoose.model('SurplusListing').countDocuments(),
     foodRequests: await mongoose.model('FoodRequest').countDocuments(),
+    expenses: await mongoose.model('Expense').countDocuments(),
+    contributions: await mongoose.model('Contribution').countDocuments(),
   };
 }
