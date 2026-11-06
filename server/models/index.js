@@ -15,3 +15,7 @@ export * from './Event.js';
 export * from './Budget.js';
 export * from './Rsvp.js';
 export * from './CookingBatch.js';
+// M1-C
+export * from './SurplusListing.js';
+export * from './FoodRequest.js';
+export * from './Reservation.js';

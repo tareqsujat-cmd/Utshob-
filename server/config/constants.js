@@ -137,6 +137,25 @@ export const INVITATION_PALETTES = ['marigold', 'teal', 'rose', 'night'];
 export const INVITATION_FONTS = ['classic', 'modern'];
 export const INVITATION_LAYOUTS = ['centered', 'banner'];
 
+// ---- M1-C Surplus food ----
+export const ALLERGENS = ['nuts', 'peanuts', 'milk', 'egg', 'fish', 'shellfish', 'gluten', 'soy', 'sesame'];
+export const ALLERGEN_LABELS = {
+  nuts: 'Tree nuts', peanuts: 'Peanuts', milk: 'Milk / dairy', egg: 'Egg', fish: 'Fish', shellfish: 'Shellfish',
+  gluten: 'Wheat / gluten', soy: 'Soy', sesame: 'Sesame',
+};
+export const STORAGE_CONDITIONS = ['hot_holding', 'room_temperature', 'refrigerated', 'frozen'];
+export const STORAGE_LABELS = {
+  hot_holding: 'Kept hot', room_temperature: 'Room temperature', refrigerated: 'Refrigerated', frozen: 'Frozen',
+};
+export const PACKAGING_TYPES = ['sealed_containers', 'foil_trays', 'food_grade_bags', 'bulk_pots', 'other'];
+export const PACKAGING_LABELS = {
+  sealed_containers: 'Sealed containers', foil_trays: 'Foil trays', food_grade_bags: 'Food-grade bags',
+  bulk_pots: 'Bulk pots (bring containers)', other: 'Other',
+};
+export const LISTING_STATUSES = ['open', 'fully_reserved', 'closed', 'cancelled', 'completed'];
+export const REQUEST_STATUSES = ['open', 'partially_matched', 'fulfilled', 'cancelled'];
+export const RESERVATION_STATUSES = ['reserved', 'collection_assigned', 'collected', 'partially_collected', 'cancelled', 'missed', 'closed'];
+
 // Uploaded documents: allowed file types and size.
 export const UPLOAD_MIME_TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
 export const UPLOAD_MAX_BYTES = 1024 * 1024; // 1 MB
